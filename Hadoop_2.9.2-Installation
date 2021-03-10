@@ -442,3 +442,4 @@ hadoop@ubuntudev:~$ jps
 15097 Jps
 13903 SecondaryNameNode
 
+Use stop-all.sh to stop 
