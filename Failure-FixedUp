@@ -1,0 +1,229 @@
+hadoop@ubuntudev:~$ source ~/.bashrc
+hadoop@ubuntudev:~$ start-dfs.sh && start-yarn.sh
+21/03/10 07:32:40 ERROR conf.Configuration: error parsing conf core-site.xml
+com.ctc.wstx.exc.WstxParsingException: Illegal processing instruction target ("xml"); xml (case insensitive) is reserved by the specs.
+ at [row,col,system-id]: [2,5,"file:/usr/local/hadoop-ecosystem/hadoop-2.9.2/etc/hadoop/core-site.xml"]
+	at com.ctc.wstx.sr.StreamScanner.constructWfcException(StreamScanner.java:621)
+	at com.ctc.wstx.sr.StreamScanner.throwParseError(StreamScanner.java:491)
+	at com.ctc.wstx.sr.BasicStreamReader.readPIPrimary(BasicStreamReader.java:4019)
+	at com.ctc.wstx.sr.BasicStreamReader.nextFromProlog(BasicStreamReader.java:2141)
+	at com.ctc.wstx.sr.BasicStreamReader.next(BasicStreamReader.java:1181)
+	at org.apache.hadoop.conf.Configuration.loadResource(Configuration.java:2796)
+	at org.apache.hadoop.conf.Configuration.loadResources(Configuration.java:2725)
+	at org.apache.hadoop.conf.Configuration.getProps(Configuration.java:2605)
+	at org.apache.hadoop.conf.Configuration.set(Configuration.java:1269)
+	at org.apache.hadoop.conf.Configuration.set(Configuration.java:1241)
+	at org.apache.hadoop.conf.Configuration.setBoolean(Configuration.java:1581)
+	at org.apache.hadoop.util.GenericOptionsParser.processGeneralOptions(GenericOptionsParser.java:339)
+	at org.apache.hadoop.util.GenericOptionsParser.parseGeneralOptions(GenericOptionsParser.java:572)
+	at org.apache.hadoop.util.GenericOptionsParser.<init>(GenericOptionsParser.java:174)
+	at org.apache.hadoop.util.GenericOptionsParser.<init>(GenericOptionsParser.java:156)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:70)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:90)
+	at org.apache.hadoop.hdfs.tools.GetConf.main(GetConf.java:332)
+Exception in thread "main" java.lang.RuntimeException: com.ctc.wstx.exc.WstxParsingException: Illegal processing instruction target ("xml"); xml (case insensitive) is reserved by the specs.
+ at [row,col,system-id]: [2,5,"file:/usr/local/hadoop-ecosystem/hadoop-2.9.2/etc/hadoop/core-site.xml"]
+	at org.apache.hadoop.conf.Configuration.loadResource(Configuration.java:2961)
+	at org.apache.hadoop.conf.Configuration.loadResources(Configuration.java:2725)
+	at org.apache.hadoop.conf.Configuration.getProps(Configuration.java:2605)
+	at org.apache.hadoop.conf.Configuration.set(Configuration.java:1269)
+	at org.apache.hadoop.conf.Configuration.set(Configuration.java:1241)
+	at org.apache.hadoop.conf.Configuration.setBoolean(Configuration.java:1581)
+	at org.apache.hadoop.util.GenericOptionsParser.processGeneralOptions(GenericOptionsParser.java:339)
+	at org.apache.hadoop.util.GenericOptionsParser.parseGeneralOptions(GenericOptionsParser.java:572)
+	at org.apache.hadoop.util.GenericOptionsParser.<init>(GenericOptionsParser.java:174)
+	at org.apache.hadoop.util.GenericOptionsParser.<init>(GenericOptionsParser.java:156)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:70)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:90)
+	at org.apache.hadoop.hdfs.tools.GetConf.main(GetConf.java:332)
+Caused by: com.ctc.wstx.exc.WstxParsingException: Illegal processing instruction target ("xml"); xml (case insensitive) is reserved by the specs.
+ at [row,col,system-id]: [2,5,"file:/usr/local/hadoop-ecosystem/hadoop-2.9.2/etc/hadoop/core-site.xml"]
+	at com.ctc.wstx.sr.StreamScanner.constructWfcException(StreamScanner.java:621)
+	at com.ctc.wstx.sr.StreamScanner.throwParseError(StreamScanner.java:491)
+	at com.ctc.wstx.sr.BasicStreamReader.readPIPrimary(BasicStreamReader.java:4019)
+	at com.ctc.wstx.sr.BasicStreamReader.nextFromProlog(BasicStreamReader.java:2141)
+	at com.ctc.wstx.sr.BasicStreamReader.next(BasicStreamReader.java:1181)
+	at org.apache.hadoop.conf.Configuration.loadResource(Configuration.java:2796)
+	... 12 more
+Starting namenodes on []
+localhost: starting namenode, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/hadoop-hadoop-namenode-ubuntudev.out
+localhost: starting datanode, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/hadoop-hadoop-datanode-ubuntudev.out
+21/03/10 07:32:52 ERROR conf.Configuration: error parsing conf core-site.xml
+com.ctc.wstx.exc.WstxParsingException: Illegal processing instruction target ("xml"); xml (case insensitive) is reserved by the specs.
+ at [row,col,system-id]: [2,5,"file:/usr/local/hadoop-ecosystem/hadoop-2.9.2/etc/hadoop/core-site.xml"]
+	at com.ctc.wstx.sr.StreamScanner.constructWfcException(StreamScanner.java:621)
+	at com.ctc.wstx.sr.StreamScanner.throwParseError(StreamScanner.java:491)
+	at com.ctc.wstx.sr.BasicStreamReader.readPIPrimary(BasicStreamReader.java:4019)
+	at com.ctc.wstx.sr.BasicStreamReader.nextFromProlog(BasicStreamReader.java:2141)
+	at com.ctc.wstx.sr.BasicStreamReader.next(BasicStreamReader.java:1181)
+	at org.apache.hadoop.conf.Configuration.loadResource(Configuration.java:2796)
+	at org.apache.hadoop.conf.Configuration.loadResources(Configuration.java:2725)
+	at org.apache.hadoop.conf.Configuration.getProps(Configuration.java:2605)
+	at org.apache.hadoop.conf.Configuration.set(Configuration.java:1269)
+	at org.apache.hadoop.conf.Configuration.set(Configuration.java:1241)
+	at org.apache.hadoop.conf.Configuration.setBoolean(Configuration.java:1581)
+	at org.apache.hadoop.util.GenericOptionsParser.processGeneralOptions(GenericOptionsParser.java:339)
+	at org.apache.hadoop.util.GenericOptionsParser.parseGeneralOptions(GenericOptionsParser.java:572)
+	at org.apache.hadoop.util.GenericOptionsParser.<init>(GenericOptionsParser.java:174)
+	at org.apache.hadoop.util.GenericOptionsParser.<init>(GenericOptionsParser.java:156)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:70)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:90)
+	at org.apache.hadoop.hdfs.tools.GetConf.main(GetConf.java:332)
+Exception in thread "main" java.lang.RuntimeException: com.ctc.wstx.exc.WstxParsingException: Illegal processing instruction target ("xml"); xml (case insensitive) is reserved by the specs.
+ at [row,col,system-id]: [2,5,"file:/usr/local/hadoop-ecosystem/hadoop-2.9.2/etc/hadoop/core-site.xml"]
+	at org.apache.hadoop.conf.Configuration.loadResource(Configuration.java:2961)
+	at org.apache.hadoop.conf.Configuration.loadResources(Configuration.java:2725)
+	at org.apache.hadoop.conf.Configuration.getProps(Configuration.java:2605)
+	at org.apache.hadoop.conf.Configuration.set(Configuration.java:1269)
+	at org.apache.hadoop.conf.Configuration.set(Configuration.java:1241)
+	at org.apache.hadoop.conf.Configuration.setBoolean(Configuration.java:1581)
+	at org.apache.hadoop.util.GenericOptionsParser.processGeneralOptions(GenericOptionsParser.java:339)
+	at org.apache.hadoop.util.GenericOptionsParser.parseGeneralOptions(GenericOptionsParser.java:572)
+	at org.apache.hadoop.util.GenericOptionsParser.<init>(GenericOptionsParser.java:174)
+	at org.apache.hadoop.util.GenericOptionsParser.<init>(GenericOptionsParser.java:156)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:70)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:90)
+	at org.apache.hadoop.hdfs.tools.GetConf.main(GetConf.java:332)
+Caused by: com.ctc.wstx.exc.WstxParsingException: Illegal processing instruction target ("xml"); xml (case insensitive) is reserved by the specs.
+ at [row,col,system-id]: [2,5,"file:/usr/local/hadoop-ecosystem/hadoop-2.9.2/etc/hadoop/core-site.xml"]
+	at com.ctc.wstx.sr.StreamScanner.constructWfcException(StreamScanner.java:621)
+	at com.ctc.wstx.sr.StreamScanner.throwParseError(StreamScanner.java:491)
+	at com.ctc.wstx.sr.BasicStreamReader.readPIPrimary(BasicStreamReader.java:4019)
+	at com.ctc.wstx.sr.BasicStreamReader.nextFromProlog(BasicStreamReader.java:2141)
+	at com.ctc.wstx.sr.BasicStreamReader.next(BasicStreamReader.java:1181)
+	at org.apache.hadoop.conf.Configuration.loadResource(Configuration.java:2796)
+	... 12 more
+starting yarn daemons
+starting resourcemanager, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/yarn-hadoop-resourcemanager-ubuntudev.out
+localhost: starting nodemanager, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/yarn-hadoop-nodemanager-ubuntudev.out
+hadoop@ubuntudev:~$ start-dfs.sh && start-yarn.sh
+Starting namenodes on [localhost]
+localhost: starting namenode, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/hadoop-hadoop-namenode-ubuntudev.out
+localhost: starting datanode, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/hadoop-hadoop-datanode-ubuntudev.out
+Starting secondary namenodes [0.0.0.0]
+The authenticity of host '0.0.0.0 (0.0.0.0)' can't be established.
+ECDSA key fingerprint is SHA256:a854R6dosEyZIf6J4tFaFZoS2GdQx6sQ2Yb6MQUMv7k.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+0.0.0.0: Warning: Permanently added '0.0.0.0' (ECDSA) to the list of known hosts.
+0.0.0.0: starting secondarynamenode, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/hadoop-hadoop-secondarynamenode-ubuntudev.out
+starting yarn daemons
+starting resourcemanager, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/yarn-hadoop-resourcemanager-ubuntudev.out
+localhost: starting nodemanager, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/yarn-hadoop-nodemanager-ubuntudev.out
+hadoop@ubuntudev:~$ jps
+6465 NodeManager
+6203 SecondaryNameNode
+6029 DataNode
+6333 ResourceManager
+6766 Jps
+hadoop@ubuntudev:~$ stop -all.sh
+
+Command 'stop' not found, but there are 18 similar ones.
+
+hadoop@ubuntudev:~$ stop-all.sh
+This script is Deprecated. Instead use stop-dfs.sh and stop-yarn.sh
+Stopping namenodes on [localhost]
+localhost: no namenode to stop
+localhost: stopping datanode
+Stopping secondary namenodes [0.0.0.0]
+0.0.0.0: stopping secondarynamenode
+stopping yarn daemons
+stopping resourcemanager
+localhost: stopping nodemanager
+localhost: nodemanager did not stop gracefully after 5 seconds: killing with kill -9
+no proxyserver to stop
+hadoop@ubuntudev:~$ hdfs namenode -format
+21/03/10 07:39:38 INFO namenode.NameNode: STARTUP_MSG: 
+/************************************************************
+STARTUP_MSG: Starting NameNode
+STARTUP_MSG:   host = ubuntudev/127.0.1.1
+STARTUP_MSG:   args = [-format]
+STARTUP_MSG:   version = 2.9.2
+STARTUP_MSG:   classpath = /usr/local/hadoop-ecosystem/hadoop-2.9.2/etc/hadoop:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jersey-core-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jackson-jaxrs-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jetty-util-6.1.26.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/curator-client-2.7.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-compress-1.4.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jersey-server-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/log4j-1.2.17.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/protobuf-java-2.5.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/activation-1.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jsp-api-2.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-collections-3.2.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/json-smart-1.3.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-net-3.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/asm-3.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/apacheds-i18n-2.0.0-M15.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/gson-2.2.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jackson-mapper-asl-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/xz-1.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jaxb-api-2.2.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-codec-1.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-beanutils-1.7.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/hamcrest-core-1.3.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/slf4j-api-1.7.25.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/snappy-java-1.0.5.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-logging-1.1.3.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/htrace-core4-4.1.0-incubating.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-beanutils-core-1.8.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/curator-framework-2.7.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/paranamer-2.3.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/httpcore-4.4.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jersey-json-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-configuration-1.6.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/stax2-api-3.1.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/stax-api-1.0-2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jaxb-impl-2.2.3-1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/woodstox-core-5.0.3.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/nimbus-jose-jwt-4.41.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jettison-1.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/guava-11.0.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/api-asn1-api-1.0.0-M20.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/hadoop-auth-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/java-xmlbuilder-0.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-lang-2.6.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/servlet-api-2.5.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jets3t-0.9.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/avro-1.7.7.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/mockito-all-1.8.5.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/netty-3.6.2.Final.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jcip-annotations-1.0-1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/curator-recipes-2.7.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jackson-core-asl-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jsch-0.1.54.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-cli-1.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jetty-sslengine-6.1.26.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/xmlenc-0.52.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/hadoop-annotations-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jsr305-3.0.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-math3-3.1.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/httpclient-4.5.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-digester-1.8.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jetty-6.1.26.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-lang3-3.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/commons-io-2.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/api-util-1.0.0-M20.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/jackson-xc-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/junit-4.11.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/zookeeper-3.4.6.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/hadoop-common-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/hadoop-nfs-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/hadoop-common-2.9.2-tests.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/jersey-core-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/jetty-util-6.1.26.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/jersey-server-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/log4j-1.2.17.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/protobuf-java-2.5.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/xml-apis-1.3.04.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/hadoop-hdfs-client-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/asm-3.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/okhttp-2.7.5.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/jackson-mapper-asl-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/commons-daemon-1.0.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/commons-codec-1.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/commons-logging-1.1.3.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/htrace-core4-4.1.0-incubating.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/guava-11.0.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/jackson-databind-2.7.8.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/netty-all-4.0.23.Final.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/leveldbjni-all-1.8.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/commons-lang-2.6.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/servlet-api-2.5.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/jackson-annotations-2.7.8.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/netty-3.6.2.Final.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/jackson-core-asl-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/commons-cli-1.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/xmlenc-0.52.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/jsr305-3.0.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/jackson-core-2.7.8.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/xercesImpl-2.9.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/okio-1.6.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/jetty-6.1.26.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/lib/commons-io-2.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/hadoop-hdfs-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/hadoop-hdfs-native-client-2.9.2-tests.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/hadoop-hdfs-nfs-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/hadoop-hdfs-client-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/hadoop-hdfs-client-2.9.2-tests.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/hadoop-hdfs-rbf-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/hadoop-hdfs-native-client-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/hadoop-hdfs-rbf-2.9.2-tests.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/hdfs/hadoop-hdfs-2.9.2-tests.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jersey-core-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jackson-jaxrs-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jetty-util-6.1.26.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/curator-client-2.7.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-compress-1.4.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jersey-server-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jersey-client-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/log4j-1.2.17.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/HikariCP-java7-2.4.12.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/protobuf-java-2.5.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/activation-1.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jsp-api-2.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/ehcache-3.3.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/guice-3.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-collections-3.2.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/json-smart-1.3.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-net-3.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/asm-3.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/guice-servlet-3.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/apacheds-kerberos-codec-2.0.0-M15.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/apacheds-i18n-2.0.0-M15.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/gson-2.2.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jackson-mapper-asl-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/xz-1.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/metrics-core-3.0.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jersey-guice-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jaxb-api-2.2.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-codec-1.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-beanutils-1.7.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/snappy-java-1.0.5.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-logging-1.1.3.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/htrace-core4-4.1.0-incubating.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-beanutils-core-1.8.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/curator-framework-2.7.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/mssql-jdbc-6.2.1.jre7.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/paranamer-2.3.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/httpcore-4.4.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jersey-json-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-configuration-1.6.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/stax2-api-3.1.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/geronimo-jcache_1.0_spec-1.0-alpha-1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/stax-api-1.0-2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jaxb-impl-2.2.3-1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/woodstox-core-5.0.3.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/nimbus-jose-jwt-4.41.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/json-io-2.5.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jettison-1.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/fst-2.50.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/guava-11.0.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/api-asn1-api-1.0.0-M20.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/leveldbjni-all-1.8.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/java-xmlbuilder-0.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-lang-2.6.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/servlet-api-2.5.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jets3t-0.9.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/java-util-1.9.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/avro-1.7.7.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/netty-3.6.2.Final.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jcip-annotations-1.0-1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/curator-recipes-2.7.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jackson-core-asl-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jsch-0.1.54.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-cli-1.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jetty-sslengine-6.1.26.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/xmlenc-0.52.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jsr305-3.0.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-math3-3.1.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/aopalliance-1.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/httpclient-4.5.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/javax.inject-1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-digester-1.8.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jetty-6.1.26.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-lang3-3.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/commons-io-2.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/api-util-1.0.0-M20.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/jackson-xc-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/lib/zookeeper-3.4.6.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-applications-unmanaged-am-launcher-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-server-router-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-applications-distributedshell-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-server-nodemanager-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-server-sharedcachemanager-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-server-web-proxy-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-server-timeline-pluginstorage-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-api-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-server-resourcemanager-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-server-applicationhistoryservice-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-common-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-client-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-server-common-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-server-tests-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/yarn/hadoop-yarn-registry-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/jersey-core-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/commons-compress-1.4.1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/jersey-server-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/log4j-1.2.17.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/protobuf-java-2.5.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/guice-3.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/asm-3.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/guice-servlet-3.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/jackson-mapper-asl-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/xz-1.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/jersey-guice-1.9.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/hamcrest-core-1.3.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/snappy-java-1.0.5.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/paranamer-2.3.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/leveldbjni-all-1.8.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/avro-1.7.7.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/netty-3.6.2.Final.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/jackson-core-asl-1.9.13.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/hadoop-annotations-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/aopalliance-1.0.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/javax.inject-1.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/commons-io-2.4.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/lib/junit-4.11.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/hadoop-mapreduce-client-core-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/hadoop-mapreduce-client-common-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/hadoop-mapreduce-client-app-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-plugins-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/hadoop-mapreduce-client-shuffle-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/hadoop-mapreduce-client-hs-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.9.2.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.9.2-tests.jar:/usr/local/hadoop-ecosystem/hadoop-2.9.2/contrib/capacity-scheduler/*.jar
+STARTUP_MSG:   build = https://git-wip-us.apache.org/repos/asf/hadoop.git -r 826afbeae31ca687bc2f8471dc841b66ed2c6704; compiled by 'ajisaka' on 2018-11-13T12:42Z
+STARTUP_MSG:   java = 1.8.0_282
+************************************************************/
+21/03/10 07:39:38 INFO namenode.NameNode: registered UNIX signal handlers for [TERM, HUP, INT]
+21/03/10 07:39:38 INFO namenode.NameNode: createNameNode [-format]
+21/03/10 07:39:39 WARN common.Util: Path /usr/local/hadoop-ecosystem/hadoop_data/hdfs/namenode should be specified as a URI in configuration files. Please update hdfs configuration.
+21/03/10 07:39:39 WARN common.Util: Path /usr/local/hadoop-ecosystem/hadoop_data/hdfs/namenode should be specified as a URI in configuration files. Please update hdfs configuration.
+Formatting using clusterid: CID-e0e51f49-3bbf-478f-b877-9af116895a25
+21/03/10 07:39:39 INFO namenode.FSEditLog: Edit logging is async:true
+21/03/10 07:39:39 INFO namenode.FSNamesystem: KeyProvider: null
+21/03/10 07:39:39 INFO namenode.FSNamesystem: fsLock is fair: true
+21/03/10 07:39:39 INFO namenode.FSNamesystem: Detailed lock hold time metrics enabled: false
+21/03/10 07:39:39 INFO namenode.FSNamesystem: fsOwner             = hadoop (auth:SIMPLE)
+21/03/10 07:39:39 INFO namenode.FSNamesystem: supergroup          = supergroup
+21/03/10 07:39:39 INFO namenode.FSNamesystem: isPermissionEnabled = true
+21/03/10 07:39:39 INFO namenode.FSNamesystem: HA Enabled: false
+21/03/10 07:39:39 INFO common.Util: dfs.datanode.fileio.profiling.sampling.percentage set to 0. Disabling file IO profiling
+21/03/10 07:39:39 INFO blockmanagement.DatanodeManager: dfs.block.invalidate.limit: configured=1000, counted=60, effected=1000
+21/03/10 07:39:39 INFO blockmanagement.DatanodeManager: dfs.namenode.datanode.registration.ip-hostname-check=true
+21/03/10 07:39:39 INFO blockmanagement.BlockManager: dfs.namenode.startup.delay.block.deletion.sec is set to 000:00:00:00.000
+21/03/10 07:39:39 INFO blockmanagement.BlockManager: The block deletion will start around 2021 Mar 10 07:39:39
+21/03/10 07:39:39 INFO util.GSet: Computing capacity for map BlocksMap
+21/03/10 07:39:39 INFO util.GSet: VM type       = 64-bit
+21/03/10 07:39:39 INFO util.GSet: 2.0% max memory 966.7 MB = 19.3 MB
+21/03/10 07:39:39 INFO util.GSet: capacity      = 2^21 = 2097152 entries
+21/03/10 07:39:39 INFO blockmanagement.BlockManager: dfs.block.access.token.enable=false
+21/03/10 07:39:39 WARN conf.Configuration: No unit for dfs.heartbeat.interval(3) assuming SECONDS
+21/03/10 07:39:39 WARN conf.Configuration: No unit for dfs.namenode.safemode.extension(30000) assuming MILLISECONDS
+21/03/10 07:39:39 INFO blockmanagement.BlockManagerSafeMode: dfs.namenode.safemode.threshold-pct = 0.9990000128746033
+21/03/10 07:39:39 INFO blockmanagement.BlockManagerSafeMode: dfs.namenode.safemode.min.datanodes = 0
+21/03/10 07:39:39 INFO blockmanagement.BlockManagerSafeMode: dfs.namenode.safemode.extension = 30000
+21/03/10 07:39:39 INFO blockmanagement.BlockManager: defaultReplication         = 1
+21/03/10 07:39:39 INFO blockmanagement.BlockManager: maxReplication             = 512
+21/03/10 07:39:39 INFO blockmanagement.BlockManager: minReplication             = 1
+21/03/10 07:39:39 INFO blockmanagement.BlockManager: maxReplicationStreams      = 2
+21/03/10 07:39:39 INFO blockmanagement.BlockManager: replicationRecheckInterval = 3000
+21/03/10 07:39:39 INFO blockmanagement.BlockManager: encryptDataTransfer        = false
+21/03/10 07:39:39 INFO blockmanagement.BlockManager: maxNumBlocksToLog          = 1000
+21/03/10 07:39:39 INFO namenode.FSNamesystem: Append Enabled: true
+21/03/10 07:39:39 INFO namenode.FSDirectory: GLOBAL serial map: bits=24 maxEntries=16777215
+21/03/10 07:39:39 INFO util.GSet: Computing capacity for map INodeMap
+21/03/10 07:39:39 INFO util.GSet: VM type       = 64-bit
+21/03/10 07:39:39 INFO util.GSet: 1.0% max memory 966.7 MB = 9.7 MB
+21/03/10 07:39:39 INFO util.GSet: capacity      = 2^20 = 1048576 entries
+21/03/10 07:39:39 INFO namenode.FSDirectory: ACLs enabled? false
+21/03/10 07:39:39 INFO namenode.FSDirectory: XAttrs enabled? true
+21/03/10 07:39:39 INFO namenode.NameNode: Caching file names occurring more than 10 times
+21/03/10 07:39:39 INFO snapshot.SnapshotManager: Loaded config captureOpenFiles: falseskipCaptureAccessTimeOnlyChange: false
+21/03/10 07:39:39 INFO util.GSet: Computing capacity for map cachedBlocks
+21/03/10 07:39:39 INFO util.GSet: VM type       = 64-bit
+21/03/10 07:39:39 INFO util.GSet: 0.25% max memory 966.7 MB = 2.4 MB
+21/03/10 07:39:39 INFO util.GSet: capacity      = 2^18 = 262144 entries
+21/03/10 07:39:39 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.window.num.buckets = 10
+21/03/10 07:39:39 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.num.users = 10
+21/03/10 07:39:39 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.windows.minutes = 1,5,25
+21/03/10 07:39:39 INFO namenode.FSNamesystem: Retry cache on namenode is enabled
+21/03/10 07:39:39 INFO namenode.FSNamesystem: Retry cache will use 0.03 of total heap and retry cache entry expiry time is 600000 millis
+21/03/10 07:39:39 INFO util.GSet: Computing capacity for map NameNodeRetryCache
+21/03/10 07:39:39 INFO util.GSet: VM type       = 64-bit
+21/03/10 07:39:39 INFO util.GSet: 0.029999999329447746% max memory 966.7 MB = 297.0 KB
+21/03/10 07:39:39 INFO util.GSet: capacity      = 2^15 = 32768 entries
+21/03/10 07:39:39 INFO namenode.FSImage: Allocated new BlockPoolId: BP-1038578887-127.0.1.1-1615390779903
+21/03/10 07:39:39 INFO common.Storage: Storage directory /usr/local/hadoop-ecosystem/hadoop_data/hdfs/namenode has been successfully formatted.
+21/03/10 07:39:39 INFO namenode.FSImageFormatProtobuf: Saving image file /usr/local/hadoop-ecosystem/hadoop_data/hdfs/namenode/current/fsimage.ckpt_0000000000000000000 using no compression
+21/03/10 07:39:40 INFO namenode.FSImageFormatProtobuf: Image file /usr/local/hadoop-ecosystem/hadoop_data/hdfs/namenode/current/fsimage.ckpt_0000000000000000000 of size 325 bytes saved in 0 seconds .
+21/03/10 07:39:40 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid >= 0
+21/03/10 07:39:40 INFO namenode.NameNode: SHUTDOWN_MSG: 
+/************************************************************
+SHUTDOWN_MSG: Shutting down NameNode at ubuntudev/127.0.1.1
+************************************************************/
+hadoop@ubuntudev:~$ start-dfs.sh && start-yarn.sh
+Starting namenodes on [localhost]
+localhost: starting namenode, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/hadoop-hadoop-namenode-ubuntudev.out
+localhost: starting datanode, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/hadoop-hadoop-datanode-ubuntudev.out
+Starting secondary namenodes [0.0.0.0]
+0.0.0.0: starting secondarynamenode, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/hadoop-hadoop-secondarynamenode-ubuntudev.out
+starting yarn daemons
+starting resourcemanager, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/yarn-hadoop-resourcemanager-ubuntudev.out
+localhost: starting nodemanager, logging to /usr/local/hadoop-ecosystem/hadoop-2.9.2/logs/yarn-hadoop-nodemanager-ubuntudev.out
+hadoop@ubuntudev:~$ jps
+8400 Jps
+7681 DataNode
+8001 ResourceManager
+8133 NodeManager
+7517 NameNode
+7871 SecondaryNameNode
+hadoop@ubuntudev:~$ 
+
