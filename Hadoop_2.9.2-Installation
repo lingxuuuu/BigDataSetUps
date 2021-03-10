@@ -443,3 +443,4 @@ hadoop@ubuntudev:~$ jps
 13903 SecondaryNameNode
 
 Use stop-all.sh to stop 
+Then you can exit the terminal
