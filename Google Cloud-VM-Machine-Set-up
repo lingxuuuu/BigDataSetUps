@@ -1,0 +1,22 @@
+##Google Cloud VM Machine
+
+Follow the step and create a instance and change the following:
+
+1: Machine type: 2CPU and 8GB memory
+2:Boot disk Ubuntu 20.04LTS with Size 20GB
+3: Access Scope to: Allow full access to all Cloud API
+4: Allow HTTP traffic
+Allow HTTPs traffic
+
+VM instance is now created. 
+
+We need to install docker next step:
+1: SSH -> Open in browser window
+
+Then follow the same documentation to install Docker
+After installing the Docker, use the same documentation to install the Ubuntu Oracle
+
+** Stop and delete the VM instance if you do not want to get charged. 
+
+
+
