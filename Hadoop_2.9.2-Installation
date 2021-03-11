@@ -444,3 +444,8 @@ hadoop@ubuntudev:~$ jps
 
 Use stop-all.sh to stop 
 Then you can exit the terminal
+
+After exit, when you want to retart your hadoop:
+hadoop@ubuntudev:~$ source ~/.bashrc
+hadoop@ubuntudev:~$ start-dfs.sh && start-yarn.sh
+hadoop@ubuntudev:~$ jps
