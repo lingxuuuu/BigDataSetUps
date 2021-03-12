@@ -6,12 +6,86 @@ hadoopapache@Hadoop-Dev:~$ sudo apt-get install mysql-server
 Enter the password as root when it prompts to enter a password.
 
 
+
+
 2. Login to mysql and check the available default databases.
 
 hadoopapache@Hadoop-Dev:~$ sudo mysql -uroot -proot
 mysql> show databases;
 
 mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+
+3. Example commands of MySQL:
+mysql> create database sqoopdb;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> use sqoopdb;
+Database changed
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sqoopdb            |
+| sys                |
++--------------------+
+5 rows in set (0.00 sec)
+
+mysql> use sqoopdb;
+Database changed
+mysql> create table emp(id int, name varchar(10));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> insert into emp value(100, "Ling");
+Query OK, 1 row affected (0.02 sec)
+
+mysql> insert into emp value(101, "Shu");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into emp value(102, "Wei");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp;
++------+------+
+| id   | name |
++------+------+
+|  100 | Ling |
+|  101 | Shu  |
+|  102 | Wei  |
++------+------+
+3 rows in set (0.00 sec)
+
+mysql> insert into emp value(102, "axb");
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp;
++------+------+
+| id   | name |
++------+------+
+|  100 | Ling |
+|  101 | Shu  |
+|  102 | Wei  |
+|  102 | axb  |
++------+------+
+4 rows in set (0.00 sec)
+
+mysql> delete from emp where name like"axb";
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from emp;
++------+------+
+| id   | name |
++------+------+
+|  100 | Ling |
+|  101 | Shu  |
+|  102 | Wei  |
++------+------+
+3 rows in set (0.00 sec)
+
+
 
 
 3. Install Mysql connector.
