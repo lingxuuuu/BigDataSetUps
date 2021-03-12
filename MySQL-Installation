@@ -1,0 +1,19 @@
+1. Install mysql.
+
+hadoopapache@Hadoop-Dev:~$ sudo apt-get update
+hadoopapache@Hadoop-Dev:~$ sudo apt-get install mysql-server
+
+Enter the password as root when it prompts to enter a password.
+
+
+2. Login to mysql and check the available default databases.
+
+hadoopapache@Hadoop-Dev:~$ sudo mysql -uroot -proot
+mysql> show databases;
+
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+
+
+3. Install Mysql connector.
+
+$sudo apt-get install libmysql-java
