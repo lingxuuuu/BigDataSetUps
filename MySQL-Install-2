@@ -1,0 +1,125 @@
+#This is Sqoop installation original document from the trainer.
+
+Download Sqoop bin
+
+#Sqoop
+
+export SQOOP_HOME=/usr/local/hadoop-ecosystem/sqoop-1.4.4
+
+export PATH=$PATH:$SQOOP_HOME/bin
+
+Download mysql connector
+
+http://ftp.ntu.edu.tw/MySQL/Downloads/Connector-J/
+
+mysql-connector-java-5.1.30-bin.jar
+
+sudo apt-get install libmysql-java
+
+sudo ln -s /usr/share/java/mysql-connector-java.jar $SQOOP_HOME/lib/my-sql-connector-java.jar
+
+Copy paste sqoop-env.sh.template sqoop-env.sh
+correct hadoop home and mapredhome
+
+Mysql
+
+create database sqoopdb;
+
+use sqoopdb;
+
+show tables;
+
+create table emp(id int primary key,
+         name char(10), sal int,
+         gender char(1), dno int);
+		 
+insert into emp values(101,'abc',10000,'f',11);
+insert into emp values(102,'xyz',20000,'f',12);
+insert into emp values(103,'lmn',30000,'m',12);
+insert into emp values(104,'pqr',40000,'f',13);
+insert into emp values(105,'ghi',50000,'m',11);
+insert into emp values(106,'stu',60000,'m',11);
+
+create table customer(id integer(3), name varchar(20), age integer(2), salary integer(10));
+
+insert into customer values(101,"Ajay",27,10000);
+insert into customer values(102,"sanjay",37,20000);
+insert into customer values(103,"Arjun",22,30000);
+insert into customer values(104,"pavan",25,40000);
+insert into customer values(105,"tharun",45,50000);
+insert into customer values(106,"manoj",55,60000);
+
+sqoop version
+
+sqoop help
+
+sqoop list-databases \
+--connect jdbc:mysql://localhost:3306 \
+--username root \
+--password root
+
+alter the user in mysql
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+
+1)importing a table with primary key from RDBMS to HDFS
+
+sqoop import \
+--connect jdbc:mysql://localhost/sqoopdb \
+--username root \
+--password root \
+--table emp \
+--target-dir /user/hadoop/input/emp
+
+hadoop fs -ls /sqimp1
+
+2) Controlling the no of mappers (from 4 mappers to any no of mappers)
+
+
+sqoop import \
+--connect jdbc:mysql://localhost/sqoopdb \
+--username root \
+--password hadoop \
+--table emp -m 2 \
+--target-dir /sqimp2
+
+3)importing a table without primary key from RDBMS to HDFS
+
+create table emp2(id int, name char(10), sal int, gender char(1), dno int);
+
+insert into emp2 
+      select * from emp;
+	  
+if table is not having primary key,
+
+ number of mappers should be 1.
+
+why?
+
+ when  multiple mappers mappers initiated,
+  first mapper automatically points to begining  record of the first split. remaining mappers can not point to begining of their splits randomly. bcoz there is no primary key.
+
+  so only sequential reading is allowed from beginning of table to end of the table.
+
+   to make begining to ending as one split,
+ only one mapper should be intiated.
+
+    -m 1.
+
+sqoop import \
+--connect jdbc:mysql://localhost/sqoopdb \
+--username root \
+--password hadoop \
+--table emp2 -m 1 \
+--target-dir /sqimp3
+
+4) Filtering rows while importing data
+
+sqoop import \
+--connect jdbc:mysql://localhost/sqoopdb \
+--username root \
+--password hadoop \
+--table emp2 -m 1 --where 'gender="m"' \
+--target-dir /sqimp4
+ 
+
