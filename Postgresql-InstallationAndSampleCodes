@@ -125,5 +125,27 @@ postgres=# \c sqoopdb
 You are now connected to database "sqoopdb" as user "postgres".
 
 
+//How to create a table
+sqoopdb=# create table emp(id int, name varchar(10));
+CREATE TABLE
+
+
+//How to insert data. Not like MySQL, PSQL only accept single quotes ' ', not double quotes " ".
+sqoopdb=# insert into emp values(100, 'Ling');
+INSERT 0 1
+sqoopdb=# insert into emp values(101, 'Shu');
+INSERT 0 1
+sqoopdb=# insert into emp values(101, 'Wei');
+INSERT 0 1
+
+sqoopdb=# select * from emp;
+ id  | name 
+-----+------
+ 100 | Ling
+ 101 | Shu
+ 101 | Wei
+(3 rows)
+
+
 
  
