@@ -11,6 +11,29 @@ sqoop import \
 --table emp \
 --target-dir /user/input/emp1
 
+//check the imported item
+$ hdfs dfs -ls /user/input/emp1
+
+//output
+hadoop@ubuntudev:~$ hdfs dfs -ls /user/input/emp1
+Found 5 items
+-rw-r--r--   1 hadoop supergroup          0 2021-03-14 22:08 /user/input/emp1/_SUCCESS
+-rw-r--r--   1 hadoop supergroup         38 2021-03-14 22:08 /user/input/emp1/part-m-00000
+-rw-r--r--   1 hadoop supergroup         19 2021-03-14 22:08 /user/input/emp1/part-m-00001
+-rw-r--r--   1 hadoop supergroup         19 2021-03-14 22:08 /user/input/emp1/part-m-00002
+-rw-r--r--   1 hadoop supergroup         38 2021-03-14 22:08 /user/input/emp1/part-m-00003
+
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp1//part-m-00000
+101,abc,10000,f,11
+102,xyz,20000,f,12
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp1//part-m-00001
+103,lmn,30000,m,12
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp1//part-m-00002
+104,pqr,40000,f,13
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp1//part-m-00003
+105,ghi,50000,m,11
+106,stu,60000,m,11
+
 
 
 2) With 1 mapper
@@ -19,9 +42,25 @@ sqoop import \
 --connect jdbc:mysql://localhost/testdb \
 --username root \
 --password root \
---m 1
+--m 1 \
 --table emp \
 --target-dir /user/input/emp2
+
+//check the imported item
+$ hdfs dfs -ls /user/input/emp2
+
+//output: because we use 1 mapper, there is only item
+hadoop@ubuntudev:~$ hdfs dfs -ls /user/input/emp2
+Found 2 items
+-rw-r--r--   1 hadoop supergroup          0 2021-03-14 21:47 /user/input/emp2/_SUCCESS
+-rw-r--r--   1 hadoop supergroup        114 2021-03-14 21:47 /user/input/emp2/part-m-00000
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp2/*
+101,abc,10000,f,11
+102,xyz,20000,f,12
+103,lmn,30000,m,12
+104,pqr,40000,f,13
+105,ghi,50000,m,11
+106,stu,60000,m,11
 
 
 
@@ -32,7 +71,8 @@ insert into emp2
       select * from emp;
 	  
 4) Query with where condition
-	  
+
+//select employee only gender = f
 sqoop import \
 --connect jdbc:mysql://localhost/sqoopdb \
 --username root \
@@ -40,6 +80,21 @@ sqoop import \
 --table emp -m 1 --where 'gender="f"' \
 --target-dir /user/input/emp3
 
+//check the result
+$ hdfs dfs -ls /user/input/emp3
+
+//output: (1 mapper)
+hadoop@ubuntudev:~$ hdfs dfs -ls /user/input/emp3
+Found 2 items
+-rw-r--r--   1 hadoop supergroup          0 2021-03-14 22:28 /user/input/emp3/_SUCCESS
+-rw-r--r--   1 hadoop supergroup         57 2021-03-14 22:28 /user/input/emp3/part-m-00000
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp3/*
+101,abc,10000,f,11
+102,xyz,20000,f,12
+104,pqr,40000,f,13
+
+
+//select employee only gender = m
 sqoop import \
 --connect jdbc:mysql://localhost/sqoopdb \
 --username root \
@@ -47,7 +102,26 @@ sqoop import \
 --table emp --where 'gender="m"' \
 --target-dir /user/input/emp4
 
- 
+//check the result (4 mapper)
+$ hdfs dfs -ls /user/input/emp4
+
+//output 
+adoop@ubuntudev:~$ hdfs dfs -ls /user/input/emp4
+Found 5 items
+-rw-r--r--   1 hadoop supergroup          0 2021-03-14 22:31 /user/input/emp4/_SUCCESS
+-rw-r--r--   1 hadoop supergroup         19 2021-03-14 22:31 /user/input/emp4/part-m-00000
+-rw-r--r--   1 hadoop supergroup          0 2021-03-14 22:31 /user/input/emp4/part-m-00001
+-rw-r--r--   1 hadoop supergroup         19 2021-03-14 22:31 /user/input/emp4/part-m-00002
+-rw-r--r--   1 hadoop supergroup         19 2021-03-14 22:31 /user/input/emp4/part-m-00003
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp4/part-m-00000
+103,lmn,30000,m,12
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp4/part-m-00001
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp4/part-m-00002
+105,ghi,50000,m,11
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp4/part-m-00003
+106,stu,60000,m,11
+
+
 5) Selecting multiple columns
 sqoop import \
 --connect jdbc:mysql://localhost/sqoopdb \
@@ -55,6 +129,20 @@ sqoop import \
 --password root \
 --table emp -m 1 --columns id,name,sal \
 --target-dir /user/input/emp5
+
+//output: 
+hadoop@ubuntudev:~$ hdfs dfs -ls /user/input/emp5
+Found 2 items
+-rw-r--r--   1 hadoop supergroup          0 2021-03-14 22:36 /user/input/emp5/_SUCCESS
+-rw-r--r--   1 hadoop supergroup         84 2021-03-14 22:36 /user/input/emp5/part-m-00000
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp5/*
+101,abc,10000
+102,xyz,20000
+103,lmn,30000
+104,pqr,40000
+105,ghi,50000
+106,stu,60000
+
 
 6) Selecting multiple columns with where
 
@@ -65,6 +153,25 @@ sqoop import \
 --table emp  --columns id,name,sal --where 'sal>20000' \
 --target-dir /user/input/emp6
 
+//output:
+hadoop@ubuntudev:~$ hdfs dfs -ls /user/input/emp6
+Found 5 items
+-rw-r--r--   1 hadoop supergroup          0 2021-03-14 22:39 /user/input/emp6/_SUCCESS
+-rw-r--r--   1 hadoop supergroup         14 2021-03-14 22:38 /user/input/emp6/part-m-00000
+-rw-r--r--   1 hadoop supergroup         14 2021-03-14 22:38 /user/input/emp6/part-m-00001
+-rw-r--r--   1 hadoop supergroup         14 2021-03-14 22:39 /user/input/emp6/part-m-00002
+-rw-r--r--   1 hadoop supergroup         14 2021-03-14 22:39 /user/input/emp6/part-m-00003
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp6/part-m-00000
+103,lmn,30000
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp6/part-m-00001
+104,pqr,40000
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp6/part-m-00002
+105,ghi,50000
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp6/part-m-00003
+106,stu,60000
+
+
+
 7) Export
 cat > marks
 Rohith,70,80,50
@@ -73,7 +180,7 @@ Aruna,85,75,65
 kamal,90,80,60
 miller,75,85,95
 
-hadoop fs -put marks /user/input
+hdfs dfs -put marks /user/input
 
 create table testdb.stdmarks(name varchar(10),s1 int,s2 int,s3 int);
 
