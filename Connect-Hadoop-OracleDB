@@ -1,0 +1,384 @@
+First download objbc6_g.jar from http://www.java2s.com/Code/Jar/o/Downloadojdbc6gjar.htm, extra and put the objbc6_g.jar into /usr/local/hadoop-ecosystem/sqoop-1.4.4/lib
+Then do the following code:
+
+hadoop@ubuntudev:~$ sqoop import \
+ --connect jdbc:oracle:thin:@//localhost:1521/xe \
+ --username hr \
+ --password hr \
+ --table employees \
+ --columns "employee_id, first_name, last_name" \
+ --m=1 \
+ --target-dir /user/hdp/sqoop/inp/emp
+ 
+Warning: /usr/lib/hbase does not exist! HBase imports will fail.
+Please set $HBASE_HOME to the root of your HBase installation.
+Warning: /usr/lib/hcatalog does not exist! HCatalog jobs will fail.
+Please set $HCAT_HOME to the root of your HCatalog installation.
+21/03/15 08:41:46 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+21/03/15 08:41:46 INFO manager.SqlManager: Using default fetchSize of 1000
+21/03/15 08:41:46 INFO tool.CodeGenTool: Beginning code generation
+21/03/15 08:41:47 ERROR manager.SqlManager: Error executing statement: java.sql.SQLRecoverableException: IO Error: The Network Adapter could not establish the connection
+java.sql.SQLRecoverableException: IO Error: The Network Adapter could not establish the connection
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:517)
+	at oracle.jdbc.driver.PhysicalConnection.<init>(PhysicalConnection.java:557)
+	at oracle.jdbc.driver.T4CConnection.<init>(T4CConnection.java:233)
+	at oracle.jdbc.driver.T4CDriverExtension.getConnection(T4CDriverExtension.java:29)
+	at oracle.jdbc.driver.OracleDriver.connect(OracleDriver.java:556)
+	at java.sql.DriverManager.getConnection(DriverManager.java:664)
+	at java.sql.DriverManager.getConnection(DriverManager.java:247)
+	at org.apache.sqoop.manager.OracleManager.makeConnection(OracleManager.java:314)
+	at org.apache.sqoop.manager.GenericJdbcManager.getConnection(GenericJdbcManager.java:52)
+	at org.apache.sqoop.manager.SqlManager.execute(SqlManager.java:660)
+	at org.apache.sqoop.manager.SqlManager.execute(SqlManager.java:683)
+	at org.apache.sqoop.manager.SqlManager.getColumnTypesForRawQuery(SqlManager.java:240)
+	at org.apache.sqoop.manager.SqlManager.getColumnTypes(SqlManager.java:223)
+	at org.apache.sqoop.manager.ConnManager.getColumnTypes(ConnManager.java:347)
+	at org.apache.sqoop.orm.ClassWriter.getColumnTypes(ClassWriter.java:1277)
+	at org.apache.sqoop.orm.ClassWriter.generate(ClassWriter.java:1089)
+	at org.apache.sqoop.tool.CodeGenTool.generateORM(CodeGenTool.java:96)
+	at org.apache.sqoop.tool.ImportTool.importTable(ImportTool.java:396)
+	at org.apache.sqoop.tool.ImportTool.run(ImportTool.java:502)
+	at org.apache.sqoop.Sqoop.run(Sqoop.java:145)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:76)
+	at org.apache.sqoop.Sqoop.runSqoop(Sqoop.java:181)
+	at org.apache.sqoop.Sqoop.runTool(Sqoop.java:220)
+	at org.apache.sqoop.Sqoop.runTool(Sqoop.java:229)
+	at org.apache.sqoop.Sqoop.main(Sqoop.java:238)
+Caused by: oracle.net.ns.NetException: The Network Adapter could not establish the connection
+	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:389)
+	at oracle.net.resolver.AddrResolution.resolveAndExecute(AddrResolution.java:431)
+	at oracle.net.ns.NSProtocol.establishConnection(NSProtocol.java:882)
+	at oracle.net.ns.NSProtocol.connect(NSProtocol.java:267)
+	at oracle.jdbc.driver.T4CConnection.connect(T4CConnection.java:1625)
+	at oracle.jdbc.driver.T4CConnection.logon(T4CConnection.java:365)
+	... 24 more
+Caused by: java.net.ConnectException: Connection refused (Connection refused)
+	at java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:350)
+	at java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:206)
+	at java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:188)
+	at java.net.SocksSocketImpl.connect(SocksSocketImpl.java:392)
+	at java.net.Socket.connect(Socket.java:607)
+	at oracle.net.nt.TcpNTAdapter.connect(TcpNTAdapter.java:147)
+	at oracle.net.nt.ConnOption.connect(ConnOption.java:130)
+	at oracle.net.nt.ConnStrategy.execute(ConnStrategy.java:367)
+	... 29 more
+21/03/15 08:41:47 ERROR tool.ImportTool: Encountered IOException running import job: java.io.IOException: No columns to generate for ClassWriter
+	at org.apache.sqoop.orm.ClassWriter.generate(ClassWriter.java:1095)
+	at org.apache.sqoop.tool.CodeGenTool.generateORM(CodeGenTool.java:96)
+	at org.apache.sqoop.tool.ImportTool.importTable(ImportTool.java:396)
+	at org.apache.sqoop.tool.ImportTool.run(ImportTool.java:502)
+	at org.apache.sqoop.Sqoop.run(Sqoop.java:145)
+	at org.apache.hadoop.util.ToolRunner.run(ToolRunner.java:76)
+	at org.apache.sqoop.Sqoop.runSqoop(Sqoop.java:181)
+	at org.apache.sqoop.Sqoop.runTool(Sqoop.java:220)
+	at org.apache.sqoop.Sqoop.runTool(Sqoop.java:229)
+	at org.apache.sqoop.Sqoop.main(Sqoop.java:238)
+  
+//ERROR manager.SqlManager: Error executing statement: java.sql.SQLRecoverableException: IO Error: The Network Adapter could not establish the connection
+java.sql.SQLRecoverableException: IO Error: The Network Adapter could not establish the connection
+//(This Error message means that the docker or the docker container is down)
+
+
+//first check if the docker is active
+hadoop@ubuntudev:~$ systemctl status docker
+● docker.service - Docker Application Container Engine
+     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2021-03-15 05:13:14 PDT; 5h 42min ago
+TriggeredBy: ● docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 759 (dockerd)
+      Tasks: 8
+     Memory: 135.5M
+     CGroup: /system.slice/docker.service
+             └─759 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+Mar 15 05:13:13 ubuntudev dockerd[759]: time="2021-03-15T05:13:13.261823418-07:00" level=warning msg="Your kernel does not support CPU realtime scheduler"
+Mar 15 05:13:13 ubuntudev dockerd[759]: time="2021-03-15T05:13:13.266639182-07:00" level=warning msg="Your kernel does not support cgroup blkio weight"
+Mar 15 05:13:13 ubuntudev dockerd[759]: time="2021-03-15T05:13:13.289937887-07:00" level=warning msg="Your kernel does not support cgroup blkio weight_device"
+Mar 15 05:13:13 ubuntudev dockerd[759]: time="2021-03-15T05:13:13.295042660-07:00" level=info msg="Loading containers: start."
+Mar 15 05:13:14 ubuntudev dockerd[759]: time="2021-03-15T05:13:14.063676506-07:00" level=info msg="Default bridge (docker0) is assigned with an IP address 172.17.0.0/16. Daemon option --bip can be used >
+Mar 15 05:13:14 ubuntudev dockerd[759]: time="2021-03-15T05:13:14.289050749-07:00" level=info msg="Loading containers: done."
+Mar 15 05:13:14 ubuntudev dockerd[759]: time="2021-03-15T05:13:14.473717308-07:00" level=info msg="Docker daemon" commit=363e9a8 graphdriver(s)=overlay2 version=20.10.5
+Mar 15 05:13:14 ubuntudev dockerd[759]: time="2021-03-15T05:13:14.475091607-07:00" level=info msg="Daemon has completed initialization"
+Mar 15 05:13:14 ubuntudev systemd[1]: Started Docker Application Container Engine.
+Mar 15 05:13:14 ubuntudev dockerd[759]: time="2021-03-15T05:13:14.524723525-07:00" level=info msg="API listen on /run/docker.sock"
+
+
+//check if the container is up running
+hadoop@ubuntudev:~$ sudo docker ps -a
+[sudo] password for hadoop: 
+CONTAINER ID   IMAGE                         COMMAND                  CREATED      STATUS                    PORTS                                      NAMES
+8cd97d56a000   thebookpeople/oracle-xe-11g   "/bin/sh -c '/usr/sb…"   6 days ago   Exited (255) 6 days ago   22/tcp, 8080/tcp, 0.0.0.0:1521->1521/tcp   xenodochial_pike
+
+//remove the old container and start a new one
+hadoop@ubuntudev:~$ sudo docker rm 8cd97d56a000
+8cd97d56a000
+
+//connect with Oracle xe db
+hadoop@ubuntudev:~$ sudo docker run -dit -p 1521:1521 thebookpeople/oracle-xe-11g
+8278f385c52e8ec12500c6ad45fb229fc8acae8641c23571037611b800b81750
+
+//check with container is running
+hadoop@ubuntudev:~$ sudo docker ps -a
+CONTAINER ID   IMAGE                         COMMAND                  CREATED          STATUS          PORTS                                      NAMES
+8278f385c52e   thebookpeople/oracle-xe-11g   "/bin/sh -c '/usr/sb…"   41 seconds ago   Up 40 seconds   22/tcp, 8080/tcp, 0.0.0.0:1521->1521/tcp   heuristic_vaughan
+
+//execute the db
+hadoop@ubuntudev:~$ sudo docker exec -it 8278f385c52e /bin/bash
+root@8278f385c52e:/# sqlplus
+
+SQL*Plus: Release 11.2.0.2.0 Production on Mon Mar 15 18:03:13 2021
+
+Copyright (c) 1982, 2011, Oracle.  All rights reserved.
+
+Enter user-name: system
+Enter password: 
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+SQL> ALTER USER HR ACCOUNT UNLOCK IDENTIFIED BY hr;
+
+User altered.
+
+SQL> exit
+Disconnected from Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+root@8278f385c52e:/# sqlplus
+
+SQL*Plus: Release 11.2.0.2.0 Production on Mon Mar 15 18:04:49 2021
+
+Copyright (c) 1982, 2011, Oracle.  All rights reserved.
+
+Enter user-name: hr
+Enter password: 
+
+Connected to:
+Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+
+SQL> exit
+Disconnected from Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
+root@8278f385c52e:/# exit
+exit
+
+//check the docker again to make sure everything works
+hadoop@ubuntudev:~$ systemctl status docker
+● docker.service - Docker Application Container Engine
+     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+     Active: active (running) since Mon 2021-03-15 05:13:14 PDT; 5h 54min ago
+TriggeredBy: ● docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 759 (dockerd)
+      Tasks: 15
+     Memory: 142.4M
+     CGroup: /system.slice/docker.service
+             ├─ 759 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+             └─7183 /usr/bin/docker-proxy -proto tcp -host-ip 0.0.0.0 -host-port 1521 -container-ip 172.17.0.2 -container-port 1521
+
+Mar 15 05:13:13 ubuntudev dockerd[759]: time="2021-03-15T05:13:13.261823418-07:00" level=warning msg="Your kernel does not support CPU realtime scheduler"
+Mar 15 05:13:13 ubuntudev dockerd[759]: time="2021-03-15T05:13:13.266639182-07:00" level=warning msg="Your kernel does not support cgroup blkio weight"
+Mar 15 05:13:13 ubuntudev dockerd[759]: time="2021-03-15T05:13:13.289937887-07:00" level=warning msg="Your kernel does not support cgroup blkio weight_device"
+Mar 15 05:13:13 ubuntudev dockerd[759]: time="2021-03-15T05:13:13.295042660-07:00" level=info msg="Loading containers: start."
+Mar 15 05:13:14 ubuntudev dockerd[759]: time="2021-03-15T05:13:14.063676506-07:00" level=info msg="Default bridge (docker0) is assigned with an IP address 172.17.0.0/16. Daemon option --bip can be used >
+Mar 15 05:13:14 ubuntudev dockerd[759]: time="2021-03-15T05:13:14.289050749-07:00" level=info msg="Loading containers: done."
+Mar 15 05:13:14 ubuntudev dockerd[759]: time="2021-03-15T05:13:14.473717308-07:00" level=info msg="Docker daemon" commit=363e9a8 graphdriver(s)=overlay2 version=20.10.5
+Mar 15 05:13:14 ubuntudev dockerd[759]: time="2021-03-15T05:13:14.475091607-07:00" level=info msg="Daemon has completed initialization"
+Mar 15 05:13:14 ubuntudev systemd[1]: Started Docker Application Container Engine.
+Mar 15 05:13:14 ubuntudev dockerd[759]: time="2021-03-15T05:13:14.524723525-07:00" level=info msg="API listen on /run/docker.sock"
+
+
+
+//import the db from oracle to hadoop
+hadoop@ubuntudev:~$ 
+sqoop import --connect jdbc:oracle:thin:@//localhost:1521/xe --username hr --password hr --table employees --columns "employee_id, first_name, last_name" --m=1 --target-dir /user/hdp/sqoop/inp/emp
+Warning: /usr/lib/hbase does not exist! HBase imports will fail.
+Please set $HBASE_HOME to the root of your HBase installation.
+Warning: /usr/lib/hcatalog does not exist! HCatalog jobs will fail.
+Please set $HCAT_HOME to the root of your HCatalog installation.
+21/03/15 11:07:53 WARN tool.BaseSqoopTool: Setting your password on the command-line is insecure. Consider using -P instead.
+21/03/15 11:07:53 INFO manager.SqlManager: Using default fetchSize of 1000
+21/03/15 11:07:53 INFO tool.CodeGenTool: Beginning code generation
+21/03/15 11:07:54 INFO manager.OracleManager: Time zone has been set to GMT
+21/03/15 11:07:54 INFO manager.SqlManager: Executing SQL statement: SELECT t.* FROM employees t WHERE 1=0
+21/03/15 11:07:54 INFO orm.CompilationManager: HADOOP_MAPRED_HOME is /usr/local/hadoop-ecosystem/hadoop-2.9.2
+Note: /tmp/sqoop-hadoop/compile/fc6f86a88e9ab93bb2a3268f8e67c1d8/employees.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+21/03/15 11:07:56 INFO orm.CompilationManager: Writing jar file: /tmp/sqoop-hadoop/compile/fc6f86a88e9ab93bb2a3268f8e67c1d8/employees.jar
+21/03/15 11:07:56 INFO manager.OracleManager: Time zone has been set to GMT
+21/03/15 11:07:56 INFO mapreduce.ImportJobBase: Beginning import of employees
+21/03/15 11:07:56 INFO Configuration.deprecation: mapred.jar is deprecated. Instead, use mapreduce.job.jar
+21/03/15 11:07:57 INFO Configuration.deprecation: mapred.map.tasks is deprecated. Instead, use mapreduce.job.maps
+21/03/15 11:07:57 INFO client.RMProxy: Connecting to ResourceManager at /0.0.0.0:8032
+21/03/15 11:07:59 WARN hdfs.DataStreamer: Caught exception
+java.lang.InterruptedException
+	at java.lang.Object.wait(Native Method)
+	at java.lang.Thread.join(Thread.java:1252)
+	at java.lang.Thread.join(Thread.java:1326)
+	at org.apache.hadoop.hdfs.DataStreamer.closeResponder(DataStreamer.java:980)
+	at org.apache.hadoop.hdfs.DataStreamer.endBlock(DataStreamer.java:630)
+	at org.apache.hadoop.hdfs.DataStreamer.run(DataStreamer.java:807)
+21/03/15 11:07:59 INFO mapreduce.JobSubmitter: number of splits:1
+21/03/15 11:07:59 INFO Configuration.deprecation: yarn.resourcemanager.system-metrics-publisher.enabled is deprecated. Instead, use yarn.system-metrics-publisher.enabled
+21/03/15 11:07:59 INFO mapreduce.JobSubmitter: Submitting tokens for job: job_1615810585701_0002
+21/03/15 11:08:00 INFO impl.YarnClientImpl: Submitted application application_1615810585701_0002
+21/03/15 11:08:00 INFO mapreduce.Job: The url to track the job: http://ubuntudev:8088/proxy/application_1615810585701_0002/
+21/03/15 11:08:00 INFO mapreduce.Job: Running job: job_1615810585701_0002
+21/03/15 11:08:07 INFO mapreduce.Job: Job job_1615810585701_0002 running in uber mode : false
+21/03/15 11:08:07 INFO mapreduce.Job:  map 0% reduce 0%
+21/03/15 11:08:14 INFO mapreduce.Job:  map 100% reduce 0%
+21/03/15 11:08:15 INFO mapreduce.Job: Job job_1615810585701_0002 completed successfully
+21/03/15 11:08:16 INFO mapreduce.Job: Counters: 30
+	File System Counters
+		FILE: Number of bytes read=0
+		FILE: Number of bytes written=203677
+		FILE: Number of read operations=0
+		FILE: Number of large read operations=0
+		FILE: Number of write operations=0
+		HDFS: Number of bytes read=87
+		HDFS: Number of bytes written=1910
+		HDFS: Number of read operations=4
+		HDFS: Number of large read operations=0
+		HDFS: Number of write operations=2
+	Job Counters 
+		Launched map tasks=1
+		Other local map tasks=1
+		Total time spent by all maps in occupied slots (ms)=4828
+		Total time spent by all reduces in occupied slots (ms)=0
+		Total time spent by all map tasks (ms)=4828
+		Total vcore-milliseconds taken by all map tasks=4828
+		Total megabyte-milliseconds taken by all map tasks=4943872
+	Map-Reduce Framework
+		Map input records=107
+		Map output records=107
+		Input split bytes=87
+		Spilled Records=0
+		Failed Shuffles=0
+		Merged Map outputs=0
+		GC time elapsed (ms)=124
+		CPU time spent (ms)=1550
+		Physical memory (bytes) snapshot=193282048
+		Virtual memory (bytes) snapshot=1870249984
+		Total committed heap usage (bytes)=142082048
+	File Input Format Counters 
+		Bytes Read=0
+	File Output Format Counters 
+		Bytes Written=1910
+21/03/15 11:08:16 INFO mapreduce.ImportJobBase: Transferred 1.8652 KB in 18.3765 seconds (103.9371 bytes/sec)
+21/03/15 11:08:16 INFO mapreduce.ImportJobBase: Retrieved 107 records.
+
+//list the file we just imported
+hadoop@ubuntudev:~$ hdfs dfs -ls /user/hdp/sqoop/inp/emp
+Found 2 items
+-rw-r--r--   1 hadoop supergroup          0 2021-03-15 11:08 /user/hdp/sqoop/inp/emp/_SUCCESS
+-rw-r--r--   1 hadoop supergroup       1910 2021-03-15 11:08 /user/hdp/sqoop/inp/emp/part-m-00000
+
+//see what's inside of the part-m-00000 file
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/hdp/sqoop/inp/emp/part-m-00000
+100,Steven,King
+101,Neena,Kochhar
+102,Lex,De Haan
+103,Alexander,Hunold
+104,Bruce,Ernst
+105,David,Austin
+106,Valli,Pataballa
+107,Diana,Lorentz
+108,Nancy,Greenberg
+109,Daniel,Faviet
+110,John,Chen
+111,Ismael,Sciarra
+112,Jose Manuel,Urman
+113,Luis,Popp
+114,Den,Raphaely
+115,Alexander,Khoo
+116,Shelli,Baida
+117,Sigal,Tobias
+118,Guy,Himuro
+119,Karen,Colmenares
+120,Matthew,Weiss
+121,Adam,Fripp
+122,Payam,Kaufling
+123,Shanta,Vollman
+124,Kevin,Mourgos
+125,Julia,Nayer
+126,Irene,Mikkilineni
+127,James,Landry
+128,Steven,Markle
+129,Laura,Bissot
+130,Mozhe,Atkinson
+131,James,Marlow
+132,TJ,Olson
+133,Jason,Mallin
+134,Michael,Rogers
+135,Ki,Gee
+136,Hazel,Philtanker
+137,Renske,Ladwig
+138,Stephen,Stiles
+139,John,Seo
+140,Joshua,Patel
+141,Trenna,Rajs
+142,Curtis,Davies
+143,Randall,Matos
+144,Peter,Vargas
+145,John,Russell
+146,Karen,Partners
+147,Alberto,Errazuriz
+148,Gerald,Cambrault
+149,Eleni,Zlotkey
+150,Peter,Tucker
+151,David,Bernstein
+152,Peter,Hall
+153,Christopher,Olsen
+154,Nanette,Cambrault
+155,Oliver,Tuvault
+156,Janette,King
+157,Patrick,Sully
+158,Allan,McEwen
+159,Lindsey,Smith
+160,Louise,Doran
+161,Sarath,Sewall
+162,Clara,Vishney
+163,Danielle,Greene
+164,Mattea,Marvins
+165,David,Lee
+166,Sundar,Ande
+167,Amit,Banda
+168,Lisa,Ozer
+169,Harrison,Bloom
+170,Tayler,Fox
+171,William,Smith
+172,Elizabeth,Bates
+173,Sundita,Kumar
+174,Ellen,Abel
+175,Alyssa,Hutton
+176,Jonathon,Taylor
+177,Jack,Livingston
+178,Kimberely,Grant
+179,Charles,Johnson
+180,Winston,Taylor
+181,Jean,Fleaur
+182,Martha,Sullivan
+183,Girard,Geoni
+184,Nandita,Sarchand
+185,Alexis,Bull
+186,Julia,Dellinger
+187,Anthony,Cabrio
+188,Kelly,Chung
+189,Jennifer,Dilly
+190,Timothy,Gates
+191,Randall,Perkins
+192,Sarah,Bell
+193,Britney,Everett
+194,Samuel,McCain
+195,Vance,Jones
+196,Alana,Walsh
+197,Kevin,Feeney
+198,Donald,OConnell
+199,Douglas,Grant
+200,Jennifer,Whalen
+201,Michael,Hartstein
+202,Pat,Fay
+203,Susan,Mavris
+204,Hermann,Baer
+205,Shelley,Higgins
+206,William,Gietz
+
