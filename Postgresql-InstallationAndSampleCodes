@@ -1,0 +1,129 @@
+1) $ sudo apt-get update
+
+
+2) $ sudo apt-get install postgresql postgresql-contrib
+
+
+3) //config files are in main file
+$ ls /etc/postgresql/12/main/
+conf.d  environment  pg_ctl.conf  pg_hba.conf  pg_ident.conf  postgresql.conf  start.conf
+
+//you can see the postgres commands using service postgresql
+$ service postgresql
+Usage: /etc/init.d/postgresql {start|stop|restart|reload|force-reload|status} [version ..]
+
+//view postgresql status
+$ service postgresql status
+● postgresql.service - PostgreSQL RDBMS
+     Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+     Active: active (exited) since Mon 2021-03-15 12:07:42 PDT; 7min ago
+   Main PID: 10268 (code=exited, status=0/SUCCESS)
+      Tasks: 0 (limit: 10641)
+     Memory: 0B
+     CGroup: /system.slice/postgresql.service
+
+Mar 15 12:07:42 ubuntudev systemd[1]: Starting PostgreSQL RDBMS...
+Mar 15 12:07:42 ubuntudev systemd[1]: Finished PostgreSQL RDBMS.
+
+
+4)login to postgres: Default(root) user for Postgresql is: postgres, and password is empty. 
+
+$ sudo su postgres
+
+//this means you are logged in as postgres user in postgres
+//psql to enter the shell
+
+postgres@ubuntudev:/home/hadoop$ psql
+psql (12.6 (Ubuntu 12.6-0ubuntu0.20.04.1))
+Type "help" for help.
+
+//you can write code like sql here
+// \l : list of psql dbs
+
+postgres=# \l
+                                  List of databases
+   Name    |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges   
+-----------+----------+----------+-------------+-------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+ template0 | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+(3 rows)
+
+
+// \du to list the users
+
+postgres=# \du
+                                   List of roles
+ Role name |                         Attributes                         | Member of 
+-----------+------------------------------------------------------------+-----------
+ postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+
+
+// How to change password
+postgres=# ALTER USER postgres WITH PASSWORD '{whatever password you want to give here}'; 
+// ****Don't forget the ; ; ; ; IMPORTANT!!!**** 
+// For the simplicity, I will keep my password as empty.
+// when you see "ALTER ROLE" in the command line, that means the password has been changed.
+
+
+
+// How to create a new user: create a user_1 user with password 'test123'
+postgres=# CREATE USER user_1 WITH PASSWORD 'test123';
+//when you see 'CREATE ROLE' in the command line, that means the new user has been created.
+
+
+//\du to see all the users
+postgres=# \du
+                                   List of roles
+ Role name |                         Attributes                         | Member of 
+-----------+------------------------------------------------------------+-----------
+ postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+ user_1    |   
+
+
+//give permisson to the users
+postgres=# ALTER USER user_1 WITH SUPERUSER;
+ALTER ROLE
+postgres=# \du
+                                   List of roles
+ Role name |                         Attributes                         | Member of 
+-----------+------------------------------------------------------------+-----------
+ postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+ user_1    | Superuser 
+ 
+ 
+// Delete a user
+postgres=# DROP USER user_1;
+DROP ROLE
+postgres=# \du
+                                   List of roles
+ Role name |                         Attributes                         | Member of 
+-----------+------------------------------------------------------------+-----------
+ postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+
+
+//How to create a db
+postgres=# create database sqoopdb;
+postgres=# \l
+CREATE DATABASE
+                                  List of databases
+   Name    |  Owner   | Encoding |   Collate   |    Ctype    |   Access privileges   
+-----------+----------+----------+-------------+-------------+-----------------------
+ postgres  | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+ sqoopdb   | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 |                          //sqoopdb added//
+ template0 | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+ template1 | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/postgres          +
+           |          |          |             |             | postgres=CTc/postgres
+(4 rows)
+
+
+//Connect to the db
+postgres=# \c sqoopdb
+You are now connected to database "sqoopdb" as user "postgres".
+
+
+
+ 
