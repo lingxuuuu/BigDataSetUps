@@ -442,8 +442,9 @@ hadoop@ubuntudev:~$ jps
 15097 Jps
 13903 SecondaryNameNode
 
-Use stop-all.sh to stop 
-Then you can exit the terminal
+Use stop-all.sh 
+Or stop-dfs.sh and stop-yarn.sh
+to stop before you exit the terminal
 
 After exit, when you want to retart your hadoop:
 hadoop@ubuntudev:~$ source ~/.bashrc
