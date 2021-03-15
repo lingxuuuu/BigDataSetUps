@@ -1,0 +1,180 @@
+sudo apt-get install libmysql-java
+
+sudo ln -s /usr/share/java/mysql-connector-java.jar $SQOOP_HOME/lib/my-sql-connector-java.jar
+
+1)importing a table with primary key from RDBMS to HDFS
+
+sqoop import \
+--connect jdbc:mysql://localhost/sqoopdb \
+--username root \
+--password root \
+--table emp \
+--target-dir /user/input/emp1
+
+
+
+2) With 1 mapper
+
+sqoop import \
+--connect jdbc:mysql://localhost/testdb \
+--username root \
+--password root \
+--m 1
+--table emp \
+--target-dir /user/input/emp2
+
+
+
+3) Table with no primary keys
+create table emp2(id int, name char(10), sal int, gender char(1), dno int);
+
+insert into emp2 
+      select * from emp;
+	  
+4) Query with where condition
+	  
+sqoop import \
+--connect jdbc:mysql://localhost/sqoopdb \
+--username root \
+--password root \
+--table emp -m 1 --where 'gender="f"' \
+--target-dir /user/input/emp3
+
+sqoop import \
+--connect jdbc:mysql://localhost/sqoopdb \
+--username root \
+--password root \
+--table emp --where 'gender="m"' \
+--target-dir /user/input/emp4
+
+ 
+5) Selecting multiple columns
+sqoop import \
+--connect jdbc:mysql://localhost/sqoopdb \
+--username root \
+--password root \
+--table emp -m 1 --columns id,name,sal \
+--target-dir /user/input/emp5
+
+6) Selecting multiple columns with where
+
+sqoop import \
+--connect jdbc:mysql://localhost/sqoopdb \
+--username root \
+--password root \
+--table emp  --columns id,name,sal --where 'sal>20000' \
+--target-dir /user/input/emp6
+
+7) Export
+cat > marks
+Rohith,70,80,50
+Ajith,85,65,45
+Aruna,85,75,65
+kamal,90,80,60
+miller,75,85,95
+
+hadoop fs -put marks /user/input
+
+create table testdb.stdmarks(name varchar(10),s1 int,s2 int,s3 int);
+
+sqoop export \
+--connect jdbc:mysql://localhost/testdb \
+--username root \
+--password root \
+--table stdmarks \
+--export-dir /user/output
+
+8) If the delimiter of hdfs file is tabspace('\t')
+
+ then use --input-fields-terminated-by '\t'
+
+$ cat > stud1.txt
+abc	95	85	35
+xyz	98	55	75
+lmn   100	45	69
+pdf	92	92	65
+
+hdfs dfs -put stud1.txt /user/input/temp
+
+use sqoopdb
+
+create table sqoopdb.student(name char(20),s1 int,s2 int,s3 int);
+
+sqoop export \
+--connect jdbc:mysql://localhost/sqoopdb \
+--username root \
+--password root \
+--table student \
+--export-dir /user/input/temp/stud1.txt \
+--input-fields-terminated-by '\t'
+
+
+9) Incremental load
+
+sqoop import \
+--connect jdbc:mysql://localhost/testdb \
+--username root \
+--password root \
+--table emp -m 1 \
+--target-dir /user/input/emp1 \
+--incremental append \
+--check-column eno \
+--last-value 103
+
+
+sqoop import \
+--connect jdbc:mysql://localhost/testdb \
+--username root \
+--password root \
+--table emp -m 1 \
+--target-dir /user/input/emp1 \
+--incremental append \
+--check-column eno
+
+
+10) Create a Sqoop job
+
+sqoop job --list
+
+//command to delete a sqoop job called my job
+sqoop job --delete myjob
+
+sqoop job --create myjob \
+-- import \
+--connect jdbc:mysql://localhost/sqoopdb \
+--table emp -m 1 \
+--target-dir /user/input/emp2
+
+//after create, excute the sqoop job
+sqoop job --exec myjob -- --username root -password root
+(sqoop job --exec myjob -- --username root -P)
+
+//to verify if it has been created
+hdfs dfs -ls /user/input/emp2
+
+//output
+hadoop@ubuntudev:~$ hdfs dfs -ls /user/input/emp2
+Found 2 items
+-rw-r--r--   1 hadoop supergroup          0 2021-03-14 21:47 /user/input/emp2/_SUCCESS
+-rw-r--r--   1 hadoop supergroup        114 2021-03-14 21:47 /user/input/emp2/part-m-00000
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/input/emp2/*
+101,abc,10000,f,11
+102,xyz,20000,f,12
+103,lmn,30000,m,12
+104,pqr,40000,f,13
+105,ghi,50000,m,11
+106,stu,60000,m,11
+
+
+(### The below script will not work
+
+sqoop job --create myjob \
+--import \
+--connect jdbc:mysql://localhost/sqoopdb \
+--username root \
+--password root \
+--table emp -m 1 \
+--target-dir /user/input/emp10
+
+sqoop job --exec myjob)
+
