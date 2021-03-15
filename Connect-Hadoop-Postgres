@@ -1,0 +1,28 @@
+Install the postgresql first follow the Postgresql-InstallationAndSampleCodes: https://github.com/xulingggg/BigDataSetUps/blob/main/Postgresql-InstallationAndSampleCodes
+
+After install the PSQL, you can connect PSQL with Hadoop:
+
+1)Download postgresql-42.2.18.jar and put the file into /usr/local/hadoop-ecosystem/sqoop-1.4.4/lib
+Then do the following code:
+
+//password for the postgresql has changed to 'postgres' manually by me because of the following error: authentication failed for user "postgres". If you see the same error, 
+//just go to PSQL shell to change the password.
+
+hadoop@ubuntudev:~$ sqoop import --connect jdbc:postgresql://localhost:5432/sqoopdb \
+ --table emp \
+ --username 'postgres' -P \
+ --m 1 \
+ --target-dir /user/hadoop/input/emppsql
+ 
+hadoop@ubuntudev:~$ hdfs dfs -ls /user/hadoop/input/emppsql
+Found 2 items
+-rw-r--r--   1 hadoop supergroup          0 2021-03-15 13:20 /user/hadoop/input/emppsql/_SUCCESS
+-rw-r--r--   1 hadoop supergroup         25 2021-03-15 13:20 /user/hadoop/input/emppsql/part-m-00000
+
+hadoop@ubuntudev:~$ hdfs dfs -cat /user/hadoop/input/emppsql/part-m-00000
+100,Ling
+101,Shu
+101,Wei
+
+
+
