@@ -1,0 +1,352 @@
+//Enter Hive shell: 
+
+hadoop@ubuntudev:~$ hive
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/local/hadoop-ecosystem/hive-2.3.4-bin/lib/log4j-slf4j-impl-2.6.2.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/local/hadoop-ecosystem/hadoop-2.9.2/share/hadoop/common/lib/slf4j-log4j12-1.7.25.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+
+Logging initialized using configuration in jar:file:/usr/local/hadoop-ecosystem/hive-2.3.4-bin/lib/hive-common-2.3.4.jar!/hive-log4j2.properties Async: true
+Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+hive> 
+
+
+//Create a db
+hive> create database test_db;
+
+
+
+//Show available dbs
+hive> show databases;
+
+
+//Select a db
+hive> use test_db;
+
+
+//Create a table: table-name: sample
+hive> create table sample(id int, name string);
+
+
+//Insert 1 data into the table
+//hive> insert into {table-name} values({id},"{string}");
+hive> insert into sample values(100,"ling");
+
+
+//Insert multiple data into the table
+//notice that we can use either ' ' or " " in Hive
+hive> insert into sample values(101,"shu"),(102,'wei'),(103,'unknown'),(104,'JD');
+
+
+//Show available tables
+hive> show tables;
+
+
+//Show db in the table;
+hive> select * from sample;
+
+
+//Show table detail
+//desc formatted {table-name}; or use DESCRIBE FORMATTED table_name;
+hive> desc formatted sample;
+OK
+# col_name            	data_type           	comment             
+	 	 
+id                  	int                 	                    
+name                	string              	                    
+	 	 
+# Detailed Table Information	 	 
+Database:           	test_db             	 
+Owner:              	hadoop              	 
+CreateTime:         	Tue Mar 16 10:46:25 PDT 2021	 
+LastAccessTime:     	UNKNOWN             	 
+Retention:          	0                   	 
+Location:           	hdfs://localhost:9000/user/hive/warehouse/test_db.db/sample	 
+Table Type:         	MANAGED_TABLE  //IMPOARTANT: Managed_table == internal_table, it is the opposite of external_table, which is not maintained by Hive       	 
+Table Parameters:	 	 
+	COLUMN_STATS_ACCURATE	{\"BASIC_STATS\":\"true\"}
+	numFiles            	2                   
+	numRows             	5                   
+	rawDataSize         	39                  
+	totalSize           	44                  
+	transient_lastDdlTime	1615917113          
+	 	 
+# Storage Information	 	 
+SerDe Library:      	org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe	 
+InputFormat:        	org.apache.hadoop.mapred.TextInputFormat	 
+OutputFormat:       	org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat	 
+Compressed:         	No                  	 
+Num Buckets:        	-1                  	 
+Bucket Columns:     	[]                  	 
+Sort Columns:       	[]                  	 
+Storage Desc Params:	 	 
+	serialization.format	1                   
+Time taken: 0.167 seconds, Fetched: 31 row(s)
+
+
+//Create a external table
+/*
+CREATE EXTERNAL TABLE TableName (id int, name string)
+ROW FORMAT DELIMITED   
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE
+LOCATION 'place in HDFS';
+*/
+
+hive> create external table emp(id int, name string, gender string, sal int)
+    row format delimited
+    fields terminated by ','
+    location '/user/prac/emp';
+    
+hive> desc formatted emp;
+OK
+# col_name            	data_type           	comment             
+	 	 
+id                  	int                 	                    
+name                	string              	                    
+gender              	string              	                    
+sal                 	int                 	                    
+	 	 
+# Detailed Table Information	 	 
+Database:           	test_db             	 
+Owner:              	hadoop              	 
+CreateTime:         	Tue Mar 16 11:49:00 PDT 2021	 
+LastAccessTime:     	UNKNOWN             	 
+Retention:          	0                   	 
+Location:           	hdfs://localhost:9000/user/prac/emp	 
+Table Type:         	EXTERNAL_TABLE      	 
+Table Parameters:	 	 
+	EXTERNAL            	TRUE                
+	numFiles            	0                   
+	totalSize           	0                   
+	transient_lastDdlTime	1615920540          
+	 	 
+# Storage Information	 	 
+SerDe Library:      	org.apache.hadoop.hive.serde2.lazy.LazySimpleSerDe	 
+InputFormat:        	org.apache.hadoop.mapred.TextInputFormat	 
+OutputFormat:       	org.apache.hadoop.hive.ql.io.HiveIgnoreKeyTextOutputFormat	 
+Compressed:         	No                  	 
+Num Buckets:        	-1                  	 
+Bucket Columns:     	[]                  	 
+Sort Columns:       	[]                  	 
+Storage Desc Params:	 	 
+	field.delim         	,                   
+	serialization.format	,                   
+Time taken: 0.124 seconds, Fetched: 32 row(s)
+
+
+//Transfer data to internal/external table
+/*
+i)from LFS:
+  syntax:
+  load data local inpath '{LFS-filepath}' into table {tablename};
+ii)from HDFS:
+  syntax:
+  load data inpath '{HDFS filepath}' into table {tablename};
+*/
+
+hive> load data local inpath '/home/hadoop/data/emp.csv' into table emp;
+
+
+//Let's create some local files to practise with HIVE
+
+//Create some files to interact and practice HIVE 
+//Using cat and put data in file1
+
+hadoop@ubuntudev:~/data$ pwd
+/home/hadoop/data
+
+hadoop@ubuntudev:~/data$ cat > file1
+Good Morning..........
+Good Morning.........
+Good Morning.........
+Good Morning........
+(Ctrl D to Exit)
+
+hadoop@ubuntudev:~/data$ cat > file2
+Hello............
+Hello...........
+Hello............  
+Hello............
+Hello...........
+(Ctrl D to Exit;)
+
+//Show data in the file. NOTICE: there is no > when you show the data. but there is > when you create the data
+hadoop@ubuntudev:~/data$ cat file1
+Good Morning..........
+Good Morning.........
+Good Morning.........
+Good Morning........
+
+//Create a new managed(internal) table and put some dummy data into the table from LFS(local file system)
+hive> create table mysamp1(line string);
+hive> load data local inpath '/home/hadoop/data/file1' into table mysamp1;
+hive> select * from test_db.mysamp1;
+OK
+Good Morning..........
+Good Morning.........
+Good Morning.........
+Good Morning........
+Good Morning........
+
+hive> load data local inpath '/home/hadoop/data/file2' into table mysamp1;
+hive> select * from mysamp1;
+OK
+Good Morning..........
+Good Morning.........
+Good Morning.........
+Good Morning........
+Good Morning........
+Hello............
+Hello...........
+Hello............  
+Hello............
+Hello...........
+Hello..........
+
+
+//we just practiced how to put data into internal table, let's now practice how to interact with external table
+//create a external table and put the table in '/user/prac/mysamp'
+hive>create external table mysample2(line string) location '/user/prac/mysamp';
+
+//I already have some dummy data in my HDFS
+hadoop@ubuntudev:~$ hdfs dfs -cat input/emppsql/part-m-00000*
+100,Ling
+101,Shu
+101,Wei
+
+//put the data from HDFS to external table
+//load data inpath '{HDFS filepath}' into table {tablename};
+hive> load data inpath 'input/emppsql/part-m-00000' into table mysample2;
+hive> select * from mysample2;
+OK
+100,Ling
+101,Shu
+101,Wei
+
+
+//create table from another table 
+hive> create table mysample2 as(select * from mysample1);
+
+hive> select * from mysample2;
+OK
+Good Morning..........
+Good Morning.........
+Good Morning.........
+Good Morning........
+Good Morning........
+Time taken: 0.249 seconds, Fetched: 5 row(s)
+hive> select * from mysample1;
+OK
+Good Morning..........
+Good Morning.........
+Good Morning.........
+Good Morning........
+Good Morning........
+
+
+// Overwrite table and Sub String 
+//we have a table called tmpr1 and we are creating another table tmpr2 base on tmpr1
+
+hive> select * from tmpr1;
+OK
+Hyd 2015 apr 41 
+pun 2015 apr 39
+ban 2015 apr 38
+Hyd 2016 apr 34  
+pun 2016 apr 35
+ban 2016 apr 32
+Hyd 2017 apr 37  
+pun 2017 apr 39
+ban 2017 apr 38
+
+hive> create table tmpr2(year int,temp int);
+
+hive> insert overwrite table tmpr2 select substr(line,5,4),substr(line,14,2) from tmpr1;  //IMPORTANT//
+
+hive> select * from tmpr2;
+OK
+2015	41
+2015	39
+2015	38
+2016	34
+2016	35
+2016	32
+2017	37
+2017	39
+2017	38
+
+hive> insert overwrite table tmpr3 select year,max(temp),min(temp) from tmpr2 group by year;
+
+hive> select * from tmpr3;
+OK
+2015	41	38
+2016	35	32
+2017	39	37
+
+
+
+
+//CTAS ( Create Table AS)
+
+
+
+//Difference between external table and internal table(managed table):
+/*
+1. Hive Internal Table
+Hive owns the data for the internal tables.
+
+It is the default table in Hive. When the user creates a table in Hive without specifying it as external, then by default, an internal table gets created 
+in a specific location in HDFS.
+
+By default, an internal table will be created in a folder path similar to /user/hive/warehouse directory of HDFS. We can override the default location by 
+the location property during table creation. When we load data into an internal table, then Hive moves data into the warehouse directory.
+
+If we drop the managed table or partition, the table data and the metadata associated with that table will be deleted from the HDFS.
+
+The TRUNCATE command only works for the internal table, and Query Result Caching that saves the results of an executed Hive query for reuse on 
+subsequent queries only works for the internal table.
+
+2. Hive External Table
+Hive does not manage the data of the External table.
+
+We create an external table for external use as when we want to use the data outside the Hive. With the EXTERNAL keyword, Hive knows that it is not managing 
+the table data, so it does not move data to its warehouse directory.
+
+External tables are stored outside the warehouse directory. They can access data stored in sources such as remote HDFS locations or Azure Storage Volumes.
+
+Whenever we drop the external table, then only the metadata associated with the table will get deleted, the table data remains untouched by Hive.
+
+We can create the external table by specifying the EXTERNAL keyword in the Hive create table statement.
+
+*/
+
+
+//When do use internal and external tables
+/*
+1. Hive Internal Table
+We can use the internal table in cases:
+When generating temporary tables.
+When required that Hive should manage the lifecycle of the table.
+And when we don’t want table data after deletion.
+
+
+2. Hive External Table
+We can use the external table in cases:
+When we are not creating the table based on the existing table.
+When required to use data outside of Hive. For example, the data files are read and processed by an existing program that does not lock the files.
+When we don’t want to delete the table data completely even after DROP.
+When the data should not be own by Hive.
+*/
+
+
+//Errors
+hive> insert into emp values(10000, 'Ling', F, 30000);
+FAILED: SemanticException [Error 10293]: Unable to create temp file for insert values Expression of type TOK_TABLE_OR_COL not supported in insert/values
+hive> insert into table emp values(10000, 'Ling', F, 30000);
+FAILED: SemanticException [Error 10293]: Unable to create temp file for insert values Expression of type TOK_TABLE_OR_COL not supported in insert/values
+hive> INSERT INTO TABLE emp VALUES (1000, 'Ling', F, 10000);
+FAILED: SemanticException [Error 10293]: Unable to create temp file for insert values Expression of type TOK_TABLE_OR_COL not supported in insert/values
+hive> 
