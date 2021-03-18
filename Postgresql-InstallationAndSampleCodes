@@ -8,6 +8,7 @@
 $ ls /etc/postgresql/12/main/
 conf.d  environment  pg_ctl.conf  pg_hba.conf  pg_ident.conf  postgresql.conf  start.conf
 
+
 //you can see the postgres commands using service postgresql
 $ service postgresql
 Usage: /etc/init.d/postgresql {start|stop|restart|reload|force-reload|status} [version ..]
@@ -128,6 +129,10 @@ You are now connected to database "sqoopdb" as user "postgres".
 //How to create a table
 sqoopdb=# create table emp(id int, name varchar(10));
 CREATE TABLE
+
+
+//How to show tables
+sqoop=# \dt
 
 
 //How to insert data. Not like MySQL, PSQL only accept single quotes ' ', not double quotes " ".
