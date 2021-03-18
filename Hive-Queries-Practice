@@ -191,7 +191,7 @@ Good Morning.........
 Good Morning........
 Good Morning........
 
-hive> load data local inpath '/home/hadoop/data/file2' into table mysamp1;
+hive> te
 hive> select * from mysamp1;
 OK
 Good Morning..........
@@ -285,6 +285,124 @@ OK
 2015	41	38
 2016	35	32
 2017	39	37
+
+//More practises:
+
+hadoop@ubuntudev:~/data$ cat > tmpr1;
+Hyd 2015 apr 41 
+pun 2015 apr -39
+ban 2015 apr 38
+Hyd 2016 apr 34  
+pun 2016 apr -35
+ban 2016 apr 32
+Hyd 2017 apr 37  
+pun 2017 apr -39
+(Ctrl D to exit)
+
+hive> create table temp1(line string);
+
+hive> load data local inpath '/home/hadoop/data/tmpr1' into table temp1;
+
+hive> select * from temp1;
+OK
+Hyd 2015 apr 41 
+pun 2015 apr -39
+ban 2015 apr 38
+Hyd 2016 apr 34  
+pun 2016 apr -35
+ban 2016 apr 32
+Hyd 2017 apr 37  
+pun 2017 apr -39
+ban 2017 apr 38
+
+hive> insert overwrite table temp2
+    >      select * from (
+    >      select substr(line,5,4),substr(line,14,2) from temp1 where substr(line,14,1)!='-'
+    >      union all
+    >      select substr(line,5,4),substr(line,14,3) from temp1 where substr(line,14,1)='-')x;
+   
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+Query ID = hadoop_20210318043009_799c8b5c-2ee6-4b57-84bc-2bf7e45ade5c
+Total jobs = 3
+Launching Job 1 out of 3
+Number of reduce tasks is set to 0 since there's no reduce operator
+Starting Job = job_1615982528081_0001, Tracking URL = http://ubuntudev:8088/proxy/application_1615982528081_0001/
+Kill Command = /usr/local/hadoop-ecosystem/hadoop-2.9.2/bin/hadoop job  -kill job_1615982528081_0001
+Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0
+2021-03-18 04:30:23,717 Stage-1 map = 0%,  reduce = 0%
+2021-03-18 04:30:31,214 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 1.59 sec
+MapReduce Total cumulative CPU time: 1 seconds 590 msec
+Ended Job = job_1615982528081_0001
+Stage-4 is selected by condition resolver.
+Stage-3 is filtered out by condition resolver.
+Stage-5 is filtered out by condition resolver.
+Moving data to directory hdfs://localhost:9000/user/hive/warehouse/test_db.db/temp2/.hive-staging_hive_2021-03-18_04-30-09_058_5961382997010279705-1/-ext-10000
+Loading data to table test_db.temp2
+MapReduce Jobs Launched: 
+Stage-Stage-1: Map: 1   Cumulative CPU: 1.59 sec   HDFS Read: 5632 HDFS Write: 144 SUCCESS
+Total MapReduce CPU Time Spent: 1 seconds 590 msec
+OK
+Time taken: 23.905 seconds
+
+hive> select * from temp2;
+OK
+2015	41
+2015	-39
+2015	38
+2016	34
+2016	-35
+2016	32
+2017	37
+2017	-39
+2017	38
+
+hive> insert overwrite table temp3
+    >      select year,max(temp),min(temp) from temp2 group by year;
+
+hive> select * from temp3;
+OK
+2015	41	-39
+2016	34	-35
+2017	38	-39
+
+
+//File formats from Hive_queries practice 2
+
+hive> CREATE TABLE tab_avro (field1 int, field2 string)
+    > STORED AS AVRO;
+
+hive> insert into tab_avro values(1,"abc");
+hive> insert into tab_avro values(2,"xyz");
+hive> insert into tab_avro values(3,"lmn");
+
+hive> select * from tab_avro;
+OK
+1	abc
+2	xyz
+3	lmn
+
+hive> CREATE TABLE my_avro_table(notused INT)
+    >   ROW FORMAT SERDE
+    >   'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+    >   WITH SERDEPROPERTIES (
+    >     'avro.schema.url'='file:///tmp/schema.avsc')
+    >   STORED as INPUTFORMAT
+    >   'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+    >   OUTPUTFORMAT
+    >   'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat';
+FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. java.lang.RuntimeException: MetaException(message:org.apache.hadoop.hive.serde2.SerDeException Encountered AvroSerdeException determining schema. Returning signal schema to indicate problem: Unable to read schema from given path: file:///tmp/schema.avsc)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
