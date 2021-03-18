@@ -1,0 +1,141 @@
+Regions
+-------
+Regions are the tables that are split up 
+and spread across the region servers.
+
+RegionServers
+-------------
+Software processes (often called daemons) 
+you activate to store and retrieve data in HBase (Hadoop Database).
+
+The region servers have regions that -
+
+Communicate with the client.
+Handle read and write requests for all the regions under it.
+Decide the size of the region by following the region size thresholds.
+
+
+HMaster
+------------
+Is responsible for region assignment 
+as well as DDL (create, delete tables) operations.
+
+
+Quorum
+------
+The Quorum is a list of hosts on which ZooKeeper servers are running.
+
+
+HBase Tables – Logical collection of rows stored in individual partitions known as Regions.
+HBase Row – Instance of data in a table.
+RowKey -Every entry in an HBase table is identified and indexed by a RowKey.
+Columns - For every RowKey an unlimited number of attributes can be stored.
+Column Family – Data in rows is grouped together as column families and all columns are stored together in a low level storage file known as HFile.
+
+
+1. Goto https://archive.apache.org/dist/hbase/2.2.5/
+
+2. Download https://downloads.apache.org/hbase/stable/hbase-2.2.5-bin.tar.gz
+   
+3. Put the downloaded package into /usr/local/software
+   Put the extracted package into /usr/local/hadoop-ecosystem
+   cut the hbase-2.2.5 inside of hbase-2.2.5.bin, paste into haoop-ecosystem directory, then delete the hbase-2.2.5-bin
+   
+4. Open hbase-env.sh in /usr/local/hadoop-ecosystem/hbase-2.2.5/conf
+
+1)Enable JAVA_HOME: 
+
+In your terminal, check your Java_home path: 
+hadoop@ubuntudev:~$ echo $JAVA_HOME
+/usr/lib/jvm/java-1.8.0-openjdk-amd64
+
+Then put the JAVA_HOME path, HBASE_REGIONSERVERS path and HBASE_MANAGES_ZK in the file, code to add as below: (  export JAVA_HOME={JAVA_HOME_PATH}  )
+
+//this path comes from echo $JAVA_HOME
+export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64    
+export HBASE_REGIONSERVERS=/usr/local/hadoop-ecosystem/hbase-2.2.5/conf/regionservers
+export HBASE_MANAGES_ZK=true
+
+
+5. Open bashrc file and add the path
+
+Add HBase Path
+#Hbase path
+export HBASE_HOME=/usr/local/hadoop-ecosystem/hbase-2.2.5
+export PATH=$PATH:$HBASE_HOME/bin
+
+//source is a shell built-in command which is used to read and execute the content of a file
+//use source ~/.bashrc to execute the code that we just put into the file
+hadoop@ubuntudev:~$ source ~/.bashrc 
+hadoop@ubuntudev:~$ echo $HBASE_HOME
+/usr/local/hadoop-ecosystem/hbase-2.2.5
+
+
+6. Open hbase-site.xml in /usr/local/hadoop-ecosystem/hbase-2.2.5/conf
+
+hadoop@ubuntudev:~$ cd /usr/local/hadoop-ecosystem/hbase-2.2.5/conf
+hadoop@ubuntudev:/usr/local/hadoop-ecosystem/hbase-2.2.5/conf$ sudo gedit hbase-site.xml
+
+//Put the document below to the <configuration>:
+
+<property>
+<name>hbase.rootdir</name>
+<value>hdfs://localhost:9000/hbase</value>
+</property>
+
+<property>
+<name>hbase.cluster.distributed</name>
+<value>true</value>
+</property>
+
+<property>
+<name>hbase.zookeeper.quorum</name>
+<value>localhost</value>
+</property>
+
+<property>
+<name>dfs.replication</name>
+<value>1</value>
+</property>
+
+<property>
+<name>hbase.zookeeper.property.clientPort</name>
+<value>2181</value>
+</property>
+
+<property>
+<name>hbase.zookeeper.property.dataDir</name>
+<value>/usr/local/hadoop-ecosystem/hbase/zookeeper</value>
+</property>
+
+<property>
+<name>hbase.tmp.dir</name>
+<value>./tmp</value>
+</property>
+
+<property>
+<name>hbase.unsafe.stream.capability.enforce</name>
+<value>false</value>
+</property>
+
+7. Start hadoop deamons if hadoop is not running ($jps)
+
+8. Start HBase
+hadoop@ubuntudev:~$ start-hbase.sh
+
+9. Check to make sure the HBase is up and running
+
+//HQuorumPeer, HMaster, HRegionServer will be added to the deamons
+  
+hadoop@ubuntudev:~$ jps
+3170 NodeManager
+16660 HRegionServer **
+16566 HMaster **
+2903 SecondaryNameNode
+2535 NameNode
+16520 HQuorumPeer **
+17017 Jps
+3034 ResourceManager
+2703 DataNode
+
+
