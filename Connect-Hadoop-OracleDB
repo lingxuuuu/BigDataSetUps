@@ -133,7 +133,7 @@ SQL*Plus: Release 11.2.0.2.0 Production on Mon Mar 15 18:03:13 2021
 Copyright (c) 1982, 2011, Oracle.  All rights reserved.
 
 Enter user-name: system
-Enter password: 
+Enter password: oracle
 
 Connected to:
 Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
@@ -151,7 +151,7 @@ SQL*Plus: Release 11.2.0.2.0 Production on Mon Mar 15 18:04:49 2021
 Copyright (c) 1982, 2011, Oracle.  All rights reserved.
 
 Enter user-name: hr
-Enter password: 
+Enter password: hr
 
 Connected to:
 Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production
