@@ -1,0 +1,367 @@
+>status
+
+>status 'simple'
+
+>status 'summary'
+
+>status 'detailed'
+
+>table_help
+
+
+
+
+To list all the tables
+
+>list
+
+1)put-------->for insert/update
+2)scan ------>for sequential access
+3)get-------->for Random access
+4)delete-----> to delete a column
+
+Creating a table with one column family
+
+>create 'htab1','cf1'
+
+>describe  'htab1'
+
+>create 'htab2','cf1','cf2'
+
+>put 'htab2',101,'cf1:age',25
+
+>put 'htab2',101,'cf1:height',5.9
+
+>put 'htab2',101,'cf1:weight',75
+
+>scan
+
+> put 'htab2',101,'cf2:branch','CSE'
+
+> put 'htab2',101,'cf2:college','MIT'
+
+> put 'htab2',101,'cf2:Address','BOSTON'
+
+
+
+> put 'htab2',102,'cf1:age',31
+
+> put 'htab2',102,'cf1:height',5.11
+
+> put 'htab2',102,'cf1:weight',80
+
+> put 'htab2',102,'cf1:city','LONDON'
+
+> put 'htab2',102,'cf2:branch','ECE'
+
+> put 'htab2',102,'cf2:college','OXFORD'
+
+> put 'htab2',102,'cf2:Address','LONDON'
+
+> put 'htab2',103,'cf1:age',35
+
+> put 'htab2',103,'cf1:height',6.1
+
+> put 'htab2',103,'cf2:branch','IT'
+
+> put 'htab2',103,'cf2:college','HARVARD'
+
+> scan 'htab2'
+
+
+scan: 
+
+i)selecting single column from a particular column family
+
+> scan 'htab2',{COLUMNS=>'cf1:age'}
+                
+
+ii)selecting multiple columns of a particular column family
+
+> scan 'htab2',{COLUMNS=>['cf1:age','cf1:height']}
+
+
+iii)selecting multiple columns of different column families
+
+> scan 'htab2',{COLUMNS=>['cf1:age','cf2:branch']}
+
+
+
+get: To have random access
+
+
+>get 'htab2',101
+
+>get 'htab2',101,'cf1:age'
+
+>get 'htab2',101,['cf1:age','cf1:height']
+
+>get 'htab2',101,'cf1'
+
+>get 'htab2',101,['cf1:age','cf2:branch']
+
+
+
+>create 'hempdept1','e','d'
+
+>put 'hempdept1','101','e:name','Miller'
+
+>put 'hempdept1','101','e:sal',10000
+
+>put 'hempdept1','101','e:gen','m'
+
+>put 'hempdept1','101','e:dno',11
+
+>put 'hempdept1','101','d:dname','mrkt'
+
+>put 'hempdept1','101','d:loc','MA'
+
+>scan 'hempdept1'
+
+Updating a record
+
+>put 'hempdept1','101','e:age',45
+
+   if column exists,it updates
+   if column doesnot exist, it creates a new column
+   
+>scan 'hempdept1'
+
+
+>scan htab2
+
+>delete 'htab2',103,'cf2:college'
+
+
+
+Deleting a column family :
+
+   Deleting a column family directly is not possible,
+   To delete a column family first delete all the columns of that column family, then
+   automatically that column family will be deleted
+
+
+>scan 'htab2'
+
+-here cf2 column family is not deleted,to delete it first delete its columns
+>delete 'htab2',103,'cf2:branch'
+
+
+Deleting a row key:
+    To delete a row key, first we need to delete all the column families ,then automatically row key is deleted
+    To delete column families first delete its columns
+	
+>delete 'htab6',103,'cf1:age'
+
+>scan 'htab2'
+
+>delete 'htab2',103,'cf1:height'
+
+>scan 'htab2'
+
+here column family and row key are deleted automatically,whenever the columns are deleted
+
+
+
+
+
+
+## Hive and Hbase Integration:
+-----------------------------------------------------------------------------------------------------------------
+-Hbase performs OLTP  operations
+
+-Hbase cant perform Batch operations.
+
+-To perform OLTP and batch operations, Hbase to be integrated with hive,
+ so that it can perform both operations(OLTP+Batch)
+
+-in Hive and hbase integration, hive table backend will be hbase instead of hdfs.
+
+Advantage:
+i)  we can process Hbase data using hql queries.
+ii) Hbase shell commands  are used for random operations over columns.
+  but not for sequential filters, transformations,  aggregations  etc.
+iii)if Hbase table is integrated with Hive,Impala , we can perform all batch related operations.
+
+   generally, for Hive table,the backend storage is hdfs, if hive table is integrated with hbase,
+ Hive's tables backend is Hbase table.
+
+ when you submit hql statement, hive starts fetching data from Hbase table, 
+query will be executed in MapReduce Excecution model with parallel process style.
+
+here both hive and hbase are integrated, 
+when you create hive table,a table is also created automatically in hbase also, with same table name..
+if u insert data in hbase table, u can see the same in hive also....
+
+----------------------------------------------------------------------------------------------------------------
+ex:1
+
+hive>create table hbasehivetab1(id int,name string,sal int) 
+    stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+    with serdeproperties("hbase.columns.mapping"=":key,x:name,x:sal");   
+
+hive> select * from hbasehivetab1;
+OK
+Time taken: 0.307 seconds
+
+goto hbase and check------->table hbasehivetab1 exists
+
+hbase(main):001:0> list
+TABLE                                                                                                                                           
+hbaseimg2                                                                                                                                       
+hbaseimg5
+hbasehivetab1                                                                                                                                       
+hcust                                                                                                                                           
+hcust2                                                                                                                                          
+hcust5                                                                                                                                          
+hempdept                                                                                                                                        
+hempdept1                                                                                                                                       
+hempdept2                                                                                                                                       
+hempdept3 
+
+Table 'hbasehivetab1' will be available in Hbase
+
+// inserting data in hbase table
+
+hbase(main):003:0> put 'hbasehivetab1',101,'x:name','vijay'
+0 row(s) in 0.3460 seconds
+
+hbase(main):004:0> put 'hbasehivetab1',101,'x:sal',10000
+0 row(s) in 0.0190 seconds
+
+hbase(main):005:0> scan 'hbasehivetab1'
+ROW                                   COLUMN+CELL                                                                                               
+ 101                                  column=x:name, timestamp=1502763074301, value=vijay                                                       
+ 101                                  column=x:sal, timestamp=1502763099893, value=10000                                                        
+1 row(s) in 0.0180 seconds
+
+
+
+// reteiving the same data in hive table
+
+hive> select * from hbasehivetab1;
+OK
+101	vijay	10000
+Time taken: 0.394 seconds, Fetched: 1 row(s)
+
+
+as per above example, both hive and hbase table names are same.
+
+but if you want different table names i.e 
+-----------------------------------------------------------------------------------------------------------
+2) if you want to integrate hive table with  different hbase table name, then
+
+ex2:
+
+create table hbasehivetab2(cid int, cname string,bal int)
+stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,x:cname,x:bal")
+tblproperties("hbase.table.name"="hbasetab1");
+
+hbase(main):001:0> list
+TABLE                                                                                                                                           
+hbaseimg13                                                                                                                                      
+hbaseimg2                                                                                                                                       
+hbaseimg5                                                                                                                                       
+hbaseimg8                                                                                                                                       
+hbaseimg9 
+hbasetab1                                                                                                                                      
+hbasetab22                                                                                                                                      
+hcust                                                                                                                                           
+hcust2     
+
+hbase(main):002:0> put 'hbasetab1',101,'x:cname','miller'
+0 row(s) in 0.4030 seconds
+
+hbase(main):003:0> put 'hbasetab1',101,'x:bal',30000
+0 row(s) in 0.0200 seconds
+
+hbase(main):004:0> scan 'hbasetab1'
+ROW                                   COLUMN+CELL                                                                                               
+ 101                                  column=x:bal, timestamp=1502860797316, value=30000                                                        
+ 101                                  column=x:cname, timestamp=1502860778222, value=miller                                                     
+1 row(s) in 0.0630 seconds
+
+hive> select * from hbasehivetab2;
+OK
+101	miller	30000
+Time taken: 3.143 seconds, Fetched: 1 row(s)
+
+----------------------------------------------------------------------------------------------------------------------------
+3) with 2 col families
+hive> create table hbasehivetab3(id int,name string,sal int,gen string,dno int,dname string,loc string)
+ stored by 'org.apache.hadoop.hive.hbase.HBaseStorageHandler'
+with serdeproperties("hbase.columns.mapping"=":key,e:name,e:sal,e:gen,e:dno,d:dname,d:loc")
+tblproperties("hbase.table.name"="hbasetab3");
+
+hive> select * from hbasehivetab3;
+OK
+Time taken: 0.524 seconds
+
+hbase(main):005:0> list 
+TABLE                                                                                                                                           
+hbaseimg13                                                                                                                                      
+hbaseimg2                                                                                                                                       
+hbaseimg5                                                                                                                                       
+hbaseimg8                                                                                                                                       
+hbaseimg9                                                                                                                                       
+hbasetab22
+hbasetab2                                                                                                                                      
+hbasetab3                                                                                                                                      
+hcust                                                                                                                                           
+hcust2       
+
+hbase(main):007:0> put 'hbasetab3',101,'e:name','Blake'
+0 row(s) in 0.0240 seconds
+
+hbase(main):008:0> put 'hbasetab3',101,'e:sal',10000
+0 row(s) in 0.0130 seconds
+
+hbase(main):009:0> put 'hbasetab3',101,'e:gen','m'
+0 row(s) in 0.0130 seconds
+
+hbase(main):010:0> put 'hbasetab3',101,'e:dno',11
+0 row(s) in 0.0150 seconds
+
+hbase(main):011:0> put 'hbasetab3',101,'d:dname','mrkt'
+0 row(s) in 0.0190 seconds
+
+hbase(main):012:0> put 'hbasetab3',101,'d:loc','hyd'
+0 row(s) in 0.0080 seconds
+
+hbase(main):013:0> scan 'hbasetab3'
+ROW                                   COLUMN+CELL                                                                                               
+ 101                                  column=d:dname, timestamp=1502861850088, value=mrkt                                                       
+ 101                                  column=d:loc, timestamp=1502861862104, value=hyd                                                          
+ 101                                  column=e:dno, timestamp=1502861835561, value=11                                                           
+ 101                                  column=e:name, timestamp=1502861799967, value=Blake                                                       
+ 101                                  column=e:sal, timestamp=1502861812553, value=10000                                                        
+ 101                                  column=e:gen, timestamp=1502861823141, value=m                                                            
+1 row(s) in 0.0370 seconds
+
+hive> select * from hbasehivetab3;
+OK
+101	Blake	10000	m	11	mrkt	hyd
+Time taken: 0.765 seconds, Fetched: 1 row(s)
+
+Note: we can add extra fields in hbase but it wont be reflected in hive as it has schema but hbase is schemalesshbase
+(main):012:0> put 'hbasetab3',101,'d:address','Ameerpet'
+0 row(s) in 0.0080 seconds
+
+hbase(main):013:0> scan 'hbasetab3'
+ROW                                   COLUMN+CELL                                                                                               
+ 101                                  column=d:dname, timestamp=1502861850088, value=mrkt                                                       
+ 101                                  column=d:loc, timestamp=1502861862104, value=hyd                                                          
+ 101                                  column=e:dno, timestamp=1502861835561, value=11                                                           
+ 101                                  column=e:name, timestamp=1502861799967, value=Blake                                                       
+ 101                                  column=e:sal, timestamp=1502861812553, value=10000                                                        
+ 101                                  column=e:gen, timestamp=1502861823141, 
+value=m 
+ 101                                  column=e:address, timestamp=1502861823141, value=Ameerpet                                                                                             
+1 row(s) in 0.0370 seconds
+--------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
