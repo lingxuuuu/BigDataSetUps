@@ -366,31 +366,735 @@ OK
 2017	38	-39
 
 
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+
 //File formats from Hive_queries practice 2
 
-hive> CREATE TABLE tab_avro (field1 int, field2 string)
-    > STORED AS AVRO;
 
-hive> insert into tab_avro values(1,"abc");
-hive> insert into tab_avro values(2,"xyz");
-hive> insert into tab_avro values(3,"lmn");
 
-hive> select * from tab_avro;
+File formats
+-------------
+
+CREATE TABLE tab_avro (field1 int, field2 string)
+STORED AS AVRO;
+
+insert into tab_avro values(1,"abc");
+insert into tab_avro values(2,"xyz");
+insert into tab_avro values(3,"lmn");
+
+
+CREATE TABLE my_avro_table(notused INT)
+  ROW FORMAT SERDE
+  'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+  WITH SERDEPROPERTIES (
+    'avro.schema.url'='file:///tmp/schema.avsc')
+  STORED as INPUTFORMAT
+  'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+  OUTPUTFORMAT
+  'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat';
+
+Create table textfile_table
+(column_specs)
+stored as textfile;
+
+Create table sequencefile_table
+(column_specs)
+stored as sequencefile;
+
+Create table RCfile_table
+(column_specs)
+stored as rcfile;
+
+Create table avro_table
+(column_specs)
+stored as avro;
+
+Create table orc_table
+(column_specs)
+stored as orc;
+
+Create table parquet_table
+(column_specs)
+stored as parquet;
+
+Joins
+------
+
+$ cat emps1
+101,aaa,1000,m,11
+102,bbb,2000,f,12
+103,ccc,3000,m,12
+104,ddd,4000,f,13
+105,eee,5000,m,11
+106,fff,6000,f,14
+107,ggg,7000,m,15
+108,hhh,8000,f,16
+
+
+$ cat dept1
+11,mrkt,hyd
+12,HR,delhi
+13,fin,pune
+17,HR,hyd
+18,fin,pune
+19,mrkt,delhi
+
+
+
+hive> create database joinsdb;
+
+hive> use joinsdb;
+
+hive> create table emp(id int, name string,sal int, gender string, dno int)
+      row format delimited 
+      fields terminated by ',';
+
+hive> load data local inpath '/home/pylearn2018/datasets/emp1' into table emp;
+
+hive> select * from emp;
+101,aaa,1000,m,11
+102,bbb,2000,f,12
+103,ccc,3000,m,12
+104,ddd,4000,f,13
+105,eee,5000,m,11
+106,fff,6000,f,14
+107,ggg,7000,m,15
+108,hhh,8000,f,16
+
+hive> create table dept(dno int, dname string,city string)
+      row format delimited 
+      fields terminated by ',';
+
+
+hive> load data local inpath '/home/pylearn2018/datasets/dept1'into table dept;
+
+hive> select * from dept;
+11,mrkt,hyd
+12,HR,delhi
+13,fin,pune
+17,HR,hyd
+18,fin,pune
+19,mrkt,delhi
+
+ 
+
+1)Inner Join:
+
+hive> select id,name,sal,gender,e.dno,d.dno,dname,city
+      from  emp e join dept d 
+      on (e.dno=d.dno);
+101	aaa	1000	m	11	11	mrkt	hyd
+102	bbb	2000	f	12	12	HR	delhi
+103	ccc	3000	m	12	12	HR	delhi
+104	ddd	4000	f	13	13	fin	pune
+105	eee	5000	m	11	11	mrkt	hyd
+
+
+
+2)Left outer Join :
+
+hive> select id,name,sal,gender,e.dno,d.dno,dname,city                       
+      from  emp e left outer join dept d
+      on (e.dno=d.dno);                 
+101	aaa	1000	m	11	11	mrkt	hyd
+102	bbb	2000	f	12	12	HR	delhi
+103	ccc	3000	m	12	12	HR	delhi
+104	ddd	4000	f	13	13	fin	pune
+105	eee	5000	m	11	11	mrkt	hyd
+106	fff	6000	f	14	NULL	NULL	NULL
+107	ggg	7000	m	15	NULL	NULL	NULL
+108	hhh	8000	f	16	NULL	NULL	NULL
+
+
+
+3)Right outer Join:
+
+hive> select id,name,sal,gender,e.dno,d.dno,dname,city                       
+      from  emp e right outer join dept d
+      on (e.dno=d.dno); 
+101	aaa	1000	m	11	11	mrkt	hyd
+105	eee	5000	m	11	11	mrkt	hyd
+102	bbb	2000	f	12	12	HR	delhi
+103	ccc	3000	m	12	12	HR	delhi
+104	ddd	4000	f	13	13	fin	pune
+NULL	NULL	NULL	NULL	NULL	17	HR	hyd
+NULL	NULL	NULL	NULL	NULL	18	fin	pune
+NULL	NULL	NULL	NULL	NULL	19	mrkt	delhi
+
+
+Full outer Join;
+
+hive> select id,name,sal,gender,e.dno,d.dno,dname,city                       
+      from  emp e full outer join dept d
+      on (e.dno=d.dno); 
+105	eee	5000	m	11	11	mrkt	hyd
+101	aaa	1000	m	11	11	mrkt	hyd
+103	ccc	3000	m	12	12	HR	delhi
+102	bbb	2000	f	12	12	HR	delhi
+104	ddd	4000	f	13	13	fin	pune
+106	fff	6000	f	14	NULL	NULL	NULL
+107	ggg	7000	m	15	NULL	NULL	NULL
+108	hhh	8000	f	16	NULL	NULL	NULL
+NULL	NULL	NULL	NULL	NULL	17	HR	hyd
+NULL	NULL	NULL	NULL	NULL	18	fin	pune
+NULL	NULL	NULL	NULL	NULL	19	mrkt	delhi
+
+
+Denormalizing:
+
+hive> create table fullouter(id int, name string,sal int, gender string ,dno int, dname string,city string);
+
+hive> insert overwrite table fullouter
+       select id, name, sal, gender,e.dno,d.dno,dname, city
+       from emp l full outer join dept r
+       on (l.dno=r.dno);
+
+hive> select * from fullouter;
+
+105	eee	5000	m	11	11	mrkt	hyd
+101	aaa	1000	m	11	11	mrkt	hyd
+103	ccc	3000	m	12	12	HR	delhi
+102	bbb	2000	f	12	12	HR	delhi
+104	ddd	4000	f	13	13	fin	pune
+106	fff	6000	f	14	NULL	NULL	NULL
+107	ggg	7000	m	15	NULL	NULL	NULL
+108	hhh	8000	f	16	NULL	NULL	NULL
+NULL	NULL	NULL	NULL	NULL	17	HR	hyd
+NULL	NULL	NULL	NULL	NULL	18	fin	pune
+NULL	NULL	NULL	NULL	NULL	19	mrkt	delhi
+
+
+
+
+
+
+
+Json Data Processing Using Hive.
+
+
+$ cat > json1
+
+{"name":"Blake","age":25,"gender":"m"}
+{"name":"Ramya","age":27,"gender":"f"}
+{"name":"John","age":22,"gender":"m","city":"pune"}
+{"name":"Thanu","age":24,"gender":"f","city":"hyd"}
+
+
+hive> create database jsonlab;
+
+hive> use jsonlab;
 OK
-1	abc
-2	xyz
-3	lmn
 
-hive> CREATE TABLE my_avro_table(notused INT)
-    >   ROW FORMAT SERDE
-    >   'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
-    >   WITH SERDEPROPERTIES (
-    >     'avro.schema.url'='file:///tmp/schema.avsc')
-    >   STORED as INPUTFORMAT
-    >   'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
-    >   OUTPUTFORMAT
-    >   'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat';
-FAILED: Execution Error, return code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. java.lang.RuntimeException: MetaException(message:org.apache.hadoop.hive.serde2.SerDeException Encountered AvroSerdeException determining schema. Returning signal schema to indicate problem: Unable to read schema from given path: file:///tmp/schema.avsc)
+hive> create table jsonsamp1(line string);
+
+hive> load data local inpath 'json1' into table jsonsamp1;
+
+hive> select * from jsonsamp1;
+
+{"name":"Blake","age":25,"gender":"m"}
+{"name":"Ramya","age":27,"gender":"f"}
+{"name":"John","age":22,"gender":"m","city":"pune"}
+{"name":"Thanu","age":24,"gender":"f","city":"hyd"}
+
+Now making this data structured
+
+hive> select get_json_object(line,'$.name') from jsonsamp1;
+
+Blake
+Ramya
+John
+Thanu
+
+hive> select                
+       get_json_object(line,'$.name') ,
+       get_json_object(line,'$.age') , 
+       get_json_object(line,'$.gender') ,
+       get_json_object(line,'$.city')  
+       from jsonsamp1;
+
+Blake	25	m	NULL
+Ramya	27	f	NULL
+John	22	m	pune
+Thanu	24	f	hyd
+
+
+    (or) another method
+
+hive> select x.* from jsonsamp1
+       lateral view json_tuple(line,'name','age','gender','city') x as n,a,s,c;
+
+in above x.* means n,a,s,c
+
+Now creating a table and storing this result in it
+
+hive> create table jsonsamp2(name string, age int,gender string, city string);
+
+hive> insert overwrite table jsonsamp2
+      select x.* from jsonsamp1
+       lateral view json_tuple(line,'name','age','gender','city') x as n,a,s,c;
+
+
+
+hive> select * from jsonsamp2;  
+
+Blake	25	m	NULL
+Ramya	27	f	NULL
+John	22	m	pune
+Thanu	24	f	hyd                                     
+
+  
+
+
+
+ex:2 :nested records
+
+$ cat json2
+{"name":"Ravi","age":25,"wife":{"name":"banu","age":24},"city":"hyd"}
+{"name":"Ajay","age":26,"wife":{"name":"kavitha","age":21},"city":"pune"}
+{"name":"John","age":32,"wife":{"name":"sony","age":27},"city":"pune"}
+
+hive> create table jsamp1(line string);
+
+hive> load data local inpath 'json2' into table jsamp1;
+
+hive> select * from jsamp1;
+
+{"name":"Ravi","age":25,"wife":{"name":"banu","age":24},"city":"hyd"}
+{"name":"Ajay","age":26,"wife":{"name":"kavitha","age":21},"city":"pune"}
+{"name":"John","age":32,"wife":{"name":"sony","age":27},"city":"pune"}
+Time taken: 0.574 seconds, Fetched: 3 row(s)
+
+now making data structured
+
+hive> create table jsamp2(name string, age int, wife string, city string);
+
+hive> insert overwrite table jsamp2
+       select x.* from jsamp1
+      lateral view json_tuple(line,'name','age','wife','city') x as n,a,w,c;
+
+hive> select * from jsamp2;
+OK
+Ravi	25	{"name":"banu","age":24}	hyd
+Ajay	26	{"name":"kavitha","age":21}	pune
+John	32	{"name":"sony","age":27}	pune
+Time taken: 0.162 seconds, Fetched: 3 row(s)
+
+still making data structured
+
+hive> create table jsamp3(hname string, wname string,hage int, wage int, city string);
+
+hive> insert overwrite table jsamp3
+        select name, get_json_object(wife,'$.name'),
+        age , get_json_object(wife,'$.age'),
+       city from jsamp2;
+
+hive> select * from jsamp3;
+OK
+Ravi	banu	25	24	hyd
+Ajay	kavitha	26	21	pune
+John	sony	32	27	pune
+Time taken: 0.175 seconds, Fetched: 3 row(s)
+
+
+
+
+Url Data Processing
+--------------------
+
+URL or weblogs are used for predicting user behavior
+
+
+$ cat  urls
+http://yoursite.com/bigdata/mongodb?name=Raj&age=25&city=hyd
+http://yoursite.com/bigdata/spark?name=Swapna&city=del&desig=se
+http://yoursite.com/bigdata/spark?name=Satwik&age=26&city=hyd
+http://yoursite.com/oops/java?name=Manoj&gender=m&age=35
+
+Url contains , 3 parts of information.
+
+ i) Host name:  yoursite.com
+
+ii) Path: /bigdata/mongodb
+
+iii) Query string:  name=Manoj&gender=m&age=35, 
+
+Hive hase predefined parsers , to extract basic entities of url.
+
+ i) parse_url() ---> udf
+ ii) parse_url_tuple() ---> udtf.
+
+
+Ex:
+
+hive> create database urldb;
+
+hive> use urldb;
+
+hive> create table urlsamp1(line string);
+
+hive> load data local inpath 'urls' into table urlsamp1;
+
+
+hive> select * from urlsamp1;
+
+http://yoursite.com/bigdata/mongodb?name=Raj&age=25&city=hyd
+http://yoursite.com/bigdata/spark?name=Swapna&city=del&desig=se
+http://yoursite.com/bigdata/spark?name=Satwik&age=26&city=hyd
+http://yoursite.com/oops/java?name=Manoj&gender=m&age=35
+
+//using UDF
+hive> select 
+         parse_url(line,'HOST'),            
+         parse_url(line,'PATH'),
+         parse_url(line,'QUERY')
+     from urlsamp1;
+
+ (or)
+//using UDTF
+hive>select x.* from urlsamp1
+      lateral view parse_url_tuple(line,'HOST','PATH','QUERY') x as h,p,q;
+
+
+yoursite.com	/bigdata/mongodb        name=Raj&age=25&city=hyd
+yoursite.com	/bigdata/spark	name=Swapna&city=del&desig=se
+yoursite.com	/bigdata/spark	name=Satwik&age=26&city=hyd
+yoursite.com	/oops/java	name=Manoj&gender=m&age=35
+Time taken: 0.605 seconds, Fetched: 4 row(s)
+
+
+
+
+hive> create table urlsamp2(host string, path string, query string);
+
+hive> insert overwrite table urlsamp2
+       select x.* from urlsamp1
+      lateral view parse_url_tuple(line,'HOST','PATH','QUERY') x as h,p,q;
+
+hive> select * from urlsamp2;
+yoursite.com	/bigdata/mongodb        name=Raj&age=25&city=hyd
+yoursite.com	/bigdata/spark	name=Swapna&city=del&desig=se
+yoursite.com	/bigdata/spark	name=Satwik&age=26&city=hyd
+yoursite.com	/oops/java	name=Manoj&gender=m&age=35
+Time taken: 0.605 seconds, Fetched: 4 row(s)
+
+
+hive> create table urlsamp3(host string, path array<string>,query map<string,string>);
+
+hive> insert overwrite table urlsamp3
+       select host, 
+       split(path,'/'),
+       str_to_map(query,'&','=')
+       from urlsamp2;
+
+hive> select * from urlsamp3;
+OK
+yoursite.com	["","bigdata","mongodb"]	{"name":"Raj","age":"25","city":"hyd"}
+yoursite.com	["","bigdata","spark"]	{"name":"Swapna","city":"del","desig":"se"}
+yoursite.com	["","bigdata","spark"]	{"name":"Satwik","age":"26","city":"hyd"}
+yoursite.com	["","oops","java"]	{"name":"Manoj","gender":"m","age":"35"}
+Time taken: 0.173 seconds, Fetched: 4 row(s)
+
+
+
+hive> create table urlsamp4(host string,category string, course string,name string,age int,gender string,city string, desig string);
+     
+
+Time taken: 0.038 seconds
+hive> insert overwrite table urlsamp4
+       select host, path[1], path[2],
+      query['name'], query['age'],
+      query['gender'], query['city'],
+      query['desig'] from  urlsamp3;
+
+select * from urlsamp4;
+OK
+yoursite.com	bigdata	mongodb	Raj	25	NULL	hyd	NULL
+yoursite.com	bigdata	spark	Swapna	NULL	NULL	del	se
+yoursite.com	bigdata	spark	Satwik	26	NULL	hyd	NULL
+yoursite.com	oops	java	Manoj	35	m	NULL	NULL
+Time taken: 0.16 seconds, Fetched: 4 row(s)
+
+
+--------------------------------------------
+to extract all keys of a map collection/
+
+hive> select  map_keys(query)  from urlsamp3;
+
+["age","name","city"]
+["desig","name","city"]
+["age","name","city"]
+["gender","age","name"]
+
+hive> select  map_values(query) from urlsamp3;
+
+
+["25","Raj","hyd"]
+["se","Swapna","del"]
+["26","Satwik","hyd"]
+["m","35","Manoj"]
+
+
+
+hive> create table urlsamp3_1(host string,key array<string>,value array<string>);
+OK
+Time taken:
+hive> insert overwrite table urlsamp3_1
+       select host, 
+         map_keys(query), map_values(query) 
+       from urlsamp3;
+
+ select * from urlsamp3_1;
+OK
+yoursite.com	["name","age","city"]	["Raj","25","hyd"]
+yoursite.com	["name","city","desig"]	["Swapna","del","se"]
+yoursite.com	["name","age","city"]	["Satwik","26","hyd"]
+yoursite.com	["name","gender","age"]	["Manoj","m","35"]
+Time taken: 0.184 seconds, Fetched: 4 row(s)
+
+
+gedit hivejsonscript1.hql
+
+
+create database hivedb;
+
+use hivedb;
+
+create table jsamp1(line string);
+
+load data local inpath 'json2' into table jsamp1;
+
+select * from jsamp1;
+
+
+For submitting or Executing the script:
+open a new terminal and type this
+
+ $ hive -f hivejsonscript1.hql
+
+All the statements will be executing one by one
+---------------------------------------------------------------------------------
+
+open terminal a
+$ hive -e 'select * from emp'
+
+
+-e -------->for executing a single query
+-f--------->for executing set of queries
+
+
+hive> set hive.cli.print.header=true;
+hive> select * from emp;
+
+xml data processing
+
+
+[training@localhost ~]$ cat xml1
+<rec><name>Ravi</name><age>25</age><city>hyd</city></rec>
+<rec><name>Rani</name><age>24</age><gender>f</gender></rec>
+<rec><name>Sampath</name><gender>m</gender><city>Del</city></rec>
+
+
+
+hive> create table xmlsamp1(line string);
+
+hive> load data local inpath 'xml1'into table xmlsamp1; 
+
+
+hive> select * from xmlsamp1;
+OK
+<rec><name>Ravi</name><age>25</age><city>hyd</city></rec>
+<rec><name>Rani</name><age>24</age><gender>f</gender></rec>
+<rec><name>Sampath</name><gender>m</gender><city>Del</city></rec>
+
+hive> select count(*) from xmlsamp1;
+<rec><name>Ravi</name><age>25</age><city>hyd</city></rec>
+<rec><name>Rani</name><age>24</age><gender>f</gender></rec>
+<rec><name>Sampath</name><gender>m</gender><city>Del</city></rec>
+
+hive> select xpath_string(line,'rec/name') from xmlsamp1;
+Ravi
+Rani
+Sampath
+
+hive> select 
+    >  xpath_string(line,'rec/name'),
+    >  xpath_int(line,'rec/age'),
+    >  xpath_string(line,'rec/gender'),
+    >  xpath_string(line,'rec/city')
+    > from xmlsamp1;
+
+Ravi    25              hyd
+Rani    24      f
+Sampath 0       m       Del
+
+if string fields is missed, it returns blank string, if numeric field is missed it returns 0.
+
+
+
+
+_ex:2________________
+
+xml with nested tags.
+
+$ cat xml2
+<rec><name><fname>Ravi</fname><lname>kumar</lname></name><age>25</age><contact><email><personal>ravi@gmail.com</personal><official>ravi@infy.com</official></email><phone><mobile>9988665544</mobile><office>9977665544</office><residence>9955443333</residence></phone></contact></rec>
+
+
+hive> create table xmlsamp2(line string);
+
+hive> load data local inpath 'xml2' into table xmlsamp2;
+
+hive> select * from xmlsamp2;
+OK
+<rec><name><fname>Ravi</fname><lname>kumar</lname></name><age>25</age><contact><email><personal>ravi@gmail.com</personal><official>ravi@infy.com</official></email><phone><mobile>9988665544</mobile><office>9977665544</office><residence>9955443333</residence></phone></contact></rec>
+
+hive> create table xmlsamp3(fname string,lname string,age int, personal_email string,official_email string,mobile string, office string, residence string);
+
+hive> insert overwrite table xmlsamp3
+select 
+xpath_string(line,'rec/name/fname'),
+xpath_string(line,'rec/name/lname'),
+xpath_int(line,'rec/age'),          
+xpath_string(line,'rec/contact/email/personal'),
+xpath_string(line,'rec/contact/email/official'),
+xpath_string(line,'rec/contact/phone/mobile'),
+xpath_string(line,'rec/contact/phone/office'),
+xpath_string(line,'rec/contact/phone/residence') 
+from xmlsamp2;
+
+hive> select * from xmlsamp3;
+OK
+Ravi    kumar   25      ravi@gmail.com  ravi@infy.com     9988665544   9977665544   9955443333
+
+
+
+Partitioning
+-------------
+
+cat > emp
+101,aaa,1000,m,11
+102,bbb,2000,f,12
+103,ccc,3000,m,12
+104,ddd,4000,f,13
+105,eee,5000,m,11
+
+hive>create table emp(id int,name string,sal int,gender string, dno int)
+row format delimited
+fields terminated by ',';
+
+hive>load data local inpath 'emps' into table emp
+hive>select * from emp;
+101	aaa	1000	m	11
+102	bbb	2000	f	12
+103	ccc	3000	m	12
+104	ddd	4000	f	13
+105	eee	5000	m	11
+
+
+
+
+Creating Partitioned table:
+
+create table emppart(id int,name string,sal int,gender string, dno int)
+partitioned by (gen string)
+row format delimited
+fields terminated by ',';
+
+here we have 5 physical columns and 1 logical column,this logical column acts as partitioning column
+but backend data file contains only 5 fields
+partitions are not created,whenever a table is created,these partitions(sub-directories) are created when data is loaded/inserted
+
+hive>insert overwrite table emppart
+     partition(gen='m')
+     select * from emp where gender='m';
+
+
+hive>insert overwrite table emppart
+     partition(gen='f')
+     select * from emp where gender='f';
+
+
+hive>select * from emp;
+
+It is non-partitioned, displays all
+
+
+Bucketing
+----------
+
+gedit junesales
+p1,1000
+p2,3000
+p3,5000
+p4,7000
+p5,9000
+p1,1000
+p3,5000
+p2,3000
+p1,1000
+p4,7000
+p5,9000
+p3,5000
+p2,3000
+p1,1000
+p4,7000
+p5,9000
+p3,5000
+p2,3000
+p1,1000
+p4,7000
+p4,7000
+p5,9000
+p3,5000
+p2,3000
+p1,1000
+p4,7000
+p5,9000
+p1,1000
+p3,5000
+p2,3000
+p1,1000
+p4,7000
+
+create database bucks;
+
+use bucks;
+
+create table junesales(pid string,price int)
+row format delimited
+fields terminated by ',';
+
+
+load data local inpath 'junesales' into table junesales;
+
+
+select * from junesales;
+
+now making it bucketed table
+for bucketing set th following property, by default it is disabled, so enable it
+
+hive> set hive.enforce.bucketing=true;
+
+
+for partitioning a table based on particular column----->we say partitioned by(colname datatype)
+for bucketing a table on a particular column --------->we say clustered by(colname)
+
+create table buckstab(pid string,price int)
+clustered by(pid)
+into 3 buckets;
+
+//now loading data
+hive>insert overwrite table buckstab select * from junesales;
+
+
+Integrating Sqoop with Hive
+
+sqoop import --connect jdbc:mysql://localhost/testdb
+--username root -P
+--table table_name --hive-import --hive-table hive_table_name
+
 
 
 
