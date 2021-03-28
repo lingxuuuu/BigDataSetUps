@@ -252,6 +252,9 @@ sqoop job --create myjob \
 --table emp -m 1 \
 --target-dir /user/input/emp2
 
+//command to see the job
+$ sqoop job --show myjob
+
 //after create, excute the sqoop job
 sqoop job --exec myjob -- --username root -password root
 (sqoop job --exec myjob -- --username root -P)
