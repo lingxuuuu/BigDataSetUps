@@ -1,0 +1,115 @@
+sudo apt-get update
+
+sudo apt-get install python3-pip
+
+pip3 install --upgrade pip==20.2.4
+
+
+#Airflow
+
+
+
+cd /home/hadoop/.local/bin
+
+pip3 uninstall marshmallow-sqlalchemy
+
+pip3 install marshmallow-sqlalchemy==0.23.0
+
+pip3 install SQLAlchemy==1.3.23
+
+cd ~ 
+
+sudo pip3 install apache-airflow
+
+airflow db init
+
+airflow users create \
+--username admin \
+--firstname airflow \
+--lastname test \
+--role Admin \
+--email test@test.com
+
+Password: hadoop
+
+
+Add code below in ~/.bashrc file
+
+export PATH=$PATH:/home/hadoop/.local/bin
+export AIRFLOW_HOME=/home/hadoop/airflow
+
+source ~/.bashrc
+
+//webserver for airflow:
+airflow webserver --port 8080
+
+//go to localhost:8080 to login
+Username: admin
+Password: hadoop
+
+
+//Create a scheduler
+
+$ airflow scheduler
+
+
+//Goto airflow home directory
+$ cd airflow
+
+//Create a directory called dags
+$ mkdir dags
+
+//Create a dag called sample.py
+$ touch sample.py
+
+//put the code below into the sample.py
+
+from datetime import timedelta
+
+import airflow
+from airflow import DAG
+from airflow.providers.apache.hive.operators.hive import HiveOperator
+from airflow.operators.bash_operator import BashOperator
+
+default_args = {
+    'owner': 'airflow',
+    'start_date': airflow.utils.dates.days_ago(2),
+    # 'end_date': datetime(2021, 2, 17),
+    'depends_on_past': False,
+    'email': ['airflow@example.com'],
+    'email_on_failure': False,
+    'email_on_retry': False,
+    # If a task fails, retry it once after waiting
+    # at least 5 minutes
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+    }
+
+
+dag = DAG(
+    'tutorial',
+    default_args=default_args,
+    description='A simple tutorial DAG',
+    # Continue to run DAG once per day
+    schedule_interval=timedelta(days=1),
+)
+
+# t1, t2 and t3 are examples of tasks created by instantiating operators
+t1 = BashOperator(
+    task_id='print_date',
+    bash_command='date',
+    dag=dag,
+)
+
+t2 = BashOperator(
+    task_id='sleep',
+    depends_on_past=False,
+    bash_command='sleep 5',
+    dag=dag,
+)
+
+t1 >> t2
+
+
+
+
