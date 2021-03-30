@@ -1,0 +1,33 @@
+hadoop@ubuntudev:~$ sudo apt-get update
+
+//Download IntelliJ: https://www.jetbrains.com/idea/download/#section=linux
+
+hadoop@ubuntudev:~$ cd /home/hadoop/Apps/IntelliJ/bin
+
+hadoop@ubuntudev:~/Apps/IntelliJ/bin$ ls
+appletviewer.policy  fsnotifier    idea64.vmoptions  idea.properties  idea.svg        inspect.sh   log.xml    printenv.py
+format.sh            fsnotifier64  idea.png          idea.sh          idea.vmoptions  libdbm64.so  ltedit.sh  restart.py
+
+hadoop@ubuntudev:~/Apps/IntelliJ/bin$ ./idea.sh
+OpenJDK 64-Bit Server VM warning: Option UseConcMarkSweepGC was deprecated in version 9.0 and will likely be removed in a future release.
+Mar 30, 2021 7:33:07 AM java.util.prefs.FileSystemPreferences$1 run
+INFO: Created user preferences directory.
+Mar 30, 2021 7:33:07 AM java.util.prefs.FileSystemPreferences$6 run
+WARNING: Prefs file removed in background /home/hadoop/.java/.userPrefs/prefs.xml
+
+//Open IntelliJ
+// In plugins: Install Scala, Restart IDE
+
+//Download SBT: https://www.scala-sbt.org/download.html
+
+$ echo "deb https://dl.bintray.com/sbt/debian /" | sudo tee -a /etc/apt/sources.list.d/sbt.list
+$ curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
+$ sudo apt-get update
+$ sudo apt-get install sbt
+
+$sbt -v
+
+
+
+
+
