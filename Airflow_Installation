@@ -5,8 +5,7 @@ sudo apt-get install python3-pip
 pip3 install --upgrade pip==20.2.4
 
 
-#Airflow
-
+# Airflow
 
 
 cd /home/hadoop/.local/bin
