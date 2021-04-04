@@ -109,7 +109,86 @@ t2 = BashOperator(
 )
 
 t1 >> t2
+-------------------------------------------------------------------------------------------------------------------------------------------
 
 
+
+# Another example of the airflow code:
+from datetime import timedelta
+
+import airflow
+from airflow import DAG
+
+from airflow.operators.bash_operator import BashOperator #excute the .sh file
+
+from airflow.operators.python import PythonOperator #execute the .py file
+
+from airflow.sensors.filesystem import FileSensor
+
+from airflow.operators.python import PythonOperator #execute the .py file
+
+
+#create this default_args applies to assign to dag later
+default_args = {
+    'owner': 'airflow',
+    'start_date': airflow.utils.dates.days_ago(2),
+    # 'end_date': datetime(2021, 4, 05),
+    'depends_on_past': False,
+    'email': ['airflow@example.com'],
+    'email_on_failure': False,
+    'email_on_retry': False,
+    # If a task fails, retry it once after waiting
+    # at least 5 minutes
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+    }
+
+
+dag = DAG(
+    'project',
+    default_args=default_args, #this param means apply default_args to the dag
+    description='A simple DAG project',
+    # Continue to run DAG once per day
+    schedule_interval=timedelta(days=1),
+)
+
+# t1, t2 and t3 are examples of tasks created by instantiating operators
+t1 = BashOperator(
+    task_id='import',
+    retry = 3, #overwrite the default_args retry=5
+    bash_command='sh /home/hadoop/import_script.sh ',
+    dag=dag,
+)
+
+t2 = BashOperator(
+    task_id='hive',
+    depends_on_past=False,
+    bash_command='sh /home/hadoop/hive_stmts.sh ',
+    dag=dag,
+)
+
+t3 = BashOperator(
+    task_id='export',
+    depends_on_past=False,
+    bash_command='sh /home/hadoop/export_script.sh ',
+    dag=dag,
+)
+
+def _downloading_data(**kwargs):
+    with open('file/location.txt', 'w') as f:
+        f.write('my_data')
+        
+t4 = PythonOperator(
+    task_id='downloading',
+    python_callable=_download_data
+)
+
+t5 = FileSensor(
+    task_id = 'waiting'
+    #what is the connection id
+    fs_conn_id = 'fs_default'
+    
+
+t1 >> t2 >> t3 >> t4 >> t5
 
 
