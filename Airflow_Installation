@@ -188,6 +188,10 @@ t5 = FileSensor(
     #what is the connection id
     fs_conn_id = 'fs_default'
     
+    
+<img width="518" alt="52ab4938ed99d4cac4b1ecba435004f" src="https://user-images.githubusercontent.com/36904516/113495812-cc6c5380-94a8-11eb-8913-a09fb26d93ad.png">
+
+    
 
 t1 >> t2 >> t3 >> t4 >> t5
 
