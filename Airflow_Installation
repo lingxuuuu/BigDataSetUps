@@ -124,7 +124,7 @@ from airflow.operators.python import PythonOperator #execute the .py file
 
 from airflow.sensors.filesystem import FileSensor
 
-from airflow.operators.python import PythonOperator #execute the .py file
+from airflow.models.baseoperator import chain, cross_downstream
 
 
 #create this default_args applies to assign to dag later
@@ -186,6 +186,9 @@ t5 = FileSensor(
     task_id = 'waiting'
     #what is the connection id
     fs_conn_id = 'fs_default'
+    filepath='my_file.txt'
+)
+    
     
     
 <img width="518" alt="52ab4938ed99d4cac4b1ecba435004f" src="https://user-images.githubusercontent.com/36904516/113495812-cc6c5380-94a8-11eb-8913-a09fb26d93ad.png">
@@ -194,4 +197,107 @@ t5 = FileSensor(
 
 t1 >> t2 >> t3 >> t4 >> t5
 
+#import chain, the code is the same with the code above
+chain( t1, t2, t3, t4, t5)
+
+#cross dependency (you can not use >> to create dependency on 2 lists, you must use cross_downstream. You need to import the cross_downstream to use it:from airflow.models.baseoperator import cross_downstream)
+cross_downstream([t1. t2], [t3, t4, t5])
+
+
+
+
+------------------------------------------------------------------------------------------------------
+
+# Share SMALL amount of Data between tasks using XComs 
+
+from datetime import timedelta
+
+import airflow
+from airflow import DAG
+from airflow.operators.bash_operator import BashOperator #excute the .sh file
+from airflow.operators.python import PythonOperator #execute the .py file
+
+
+#create this default_args applies to assign to dag later
+default_args = {
+    'owner': 'airflow',
+    'start_date': airflow.utils.dates.days_ago(2),
+    # 'end_date': datetime(2021, 4, 05),
+    'depends_on_past': False,
+    'email': ['airflow@example.com'],
+    'email_on_failure': False,
+    'email_on_retry': False,
+    # If a task fails, retry it once after waiting
+    # at least 5 minutes
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+    }
+
+
+dag = DAG(
+    'project',
+    default_args=default_args, #this param means apply default_args to the dag
+    description='A simple DAG project',
+    # Continue to run DAG once per day
+    schedule_interval=timedelta(days=1),
+)
+
+def _downloading_data(**kwargs):
+    with open('file/location.txt', 'w') as f:
+        f.write('my_data')
+        return 42  #This return number 42 will be stored into Xcoms, and you can see it in Airflow admin Xcoms list. Xcom is a key, value pair.
+        
+def _checking_data(ti):
+    my_xcom = ti.xcom_pull(key='return_value', task_ids=['downloading'])
+    print(my_xcom)
+    
+    
+    
+(###### Another way to push the data to xcom and exact from xcom, same with the code above:
+
+def _downloading_data(ti, **kwargs):
+    with open('file/location.txt', 'w') as f:
+        f.write('my_data')
+        ti.xcome_push(key='my_key',value=42 )
+        
+        
+def _checking_data(ti):
+    my_xcom = ti.xcom_pull(key='my_key', task_ids=['downloading'])
+    print(my_xcom)
+                
+######)
+        
+        
+        
+        
+t1 = PythonOperator(
+    task_id='downloading',
+    python_callable=_download_data
+)
+
+
+
+--------------------------------------------------------------------------------------
+
+# Understand Celery
+CeleryExecutor is one of the ways you can scale out the number of workers. 
+For this to work, you need to setup a Celery backend (RabbitMQ, Redis, …) and change your airflow.cfg to point the executor parameter to CeleryExecutor 
+and provide the related Celery settings
+
+Celery Artitecture: 
+
+Airflow consist of several components:
+
+Workers - Execute the assigned tasks
+Scheduler - Responsible for adding the necessary tasks to the queue
+Web server - HTTP Server provides access to DAG/task status information
+Database - Contains information about the status of tasks, DAGs, Variables, connections, etc.
+Celery - Queue mechanism 
+
+Please note that the queue at Celery consists of two components:
+
+Broker - Stores commands for execution
+Result backend - Stores status of completed commands
+
+  
 
