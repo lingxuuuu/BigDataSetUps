@@ -76,49 +76,31 @@ hadoop@ubuntudev:~$ telnet localhost 4444
 
 # Flume connection with Twitter
 
-https://github.com/kyleiwaniec/w205Project/tree/master/flume
+```hadoop@ubuntudev:~$ cd /usr/local/hadoop-ecosystem/flume-1.9.0/lib
 
-wget https://github.com/kyleiwaniec/w205Project/blob/master/flume/flume-sources-1.0-SNAPSHOT.jar
+hadoop@ubuntudev:/usr/local/hadoop-ecosystem/flume-1.9.0/lib$ wget https://github.com/kyleiwaniec/w205Project/blob/master/flume/flume-sources-1.0-SNAPSHOT.jar
 
-wget https://github.com/kyleiwaniec/w205Project/blob/master/flume/twitter4j-stream-2.2.6.jar
+hadoop@ubuntudev:/usr/local/hadoop-ecosystem/flume-1.9.0/lib$ wget https://github.com/kyleiwaniec/w205Project/blob/master/flume/twitter4j-stream-2.2.6.jar
 
-wget https://github.com/kyleiwaniec/w205Project/blob/master/flume/twitter4j-stream-4.0.4.jar
-
-cp flume-sources-1.0-SNAPSHOT.jar $FLUME_HOME/lib
-
-cp twitter4j-stream-2.2.6.jar $FLUME_HOME/lib
-
-cp twitter4j-stream-4.0.4.jar $FLUME_HOME/lib
+hadoop@ubuntudev:/usr/local/hadoop-ecosystem/flume-1.9.0/lib$ wget https://github.com/kyleiwaniec/w205Project/blob/master/flume/twitter4j-stream-4.0.4.jar
+```
 
 
 
-Create/update conf/flume-env.sh file with the following entries
+Update conf/flume-env.sh file with the following entries
+```
+FLUME_CLASSPATH="/usr/local/hadoop-ecosystem/flume-1.9.0/lib/flume-sources-1.0-SNAPSHOT.jar"
+```
 
-export JAVA_HOME=/usr/java/jdk1.7.0_67-cloudera
-FLUME_CLASSPATH="/usr/local/hadoop_ecosystem/flume-1.9.0/lib/flume-sources-1.0-SNAPSHOT.jar"
 
 
-
-Twitter use case: Streaming twitter app log data into HDFS
+## Twitter use case: Streaming twitter app log data into HDFS
 
 Steps to be performed in twitter app:
 
-URL: https://apps.twitter.com/
-
-
-create new app in the twitter -> -> create an app -> What is your primary reason for using Twitter developer tools? Student
--> Add a valid phone number
--> Activate it
--> Will use it for learning and practicing bigdata tools. I would use  Apache flume to ingest the twitter data into Hadoop-HDFS and and move it to Hive for practicing the near real time streaming data using Apache Flume. 
--> Will pull the data from twitter and analyze it using big data tools.  I would use  Apache flume to ingest the twitter data into Hadoop-HDFS and and move it to Hive for practicing the near real time streaming using Apache Flume. 
--> Yes, the app will use Tweet, Retweets and use this data for analysis in the hadoop ecosystem. I would use  Apache flume to ingest the twitter data into Hadoop-HDFS and and move it to Hive for practicing the near real time streaming using Apache Flume. 
--> I would use  Apache flume to ingest the twitter data into Hadoop-HDFS and and move it to Hive for practicing the aggregation of the near real time streaming data using Apache Flume. 
--> No, the derived information will not be available to a government entity.
-
-
 Create an app.
 
-App name: FlumeTweetsApp
+App name: FlumeBDTest1
 
 Desc: This app will be used for testing Flume data ingesting using Twitter API.
 
@@ -130,37 +112,26 @@ Callback URL:
 https://flumetest.com
 
 
+#### Keys & tokens fronm Twitter
 
-get the following values
+Consumer Key (API Key): zXRC3ApImqLJyM9DPkITyMdZy
+Consumer Secret (API Secret): lGxDOIV4FP9ua2fftiZkxpKZ4y2WcnHo0LGBRnqw2IJgMvq2UE
+//Bearer token is not that important
+Bearer token: AAAAAAAAAAAAAAAAAAAAANNfOQEAAAAAEOnW6YqsmE287CS9BfsjR1EPCHQ%3DMg0wemicG2VCTLxbyULJYSeGeXkpSCp98u4mt8bUTp5Zr3KUHw
 
-Consumer Key (API Key): nR7U6HWxy0UFcZCIelM67X4A8
-Consumer Secret (API Secret): JcLAq5SfyryDysklDl9NUhPCZWgJGVR4KLjIiL9kiOcEu4O9fE
-Access Token:   1097509651111911426-ZK10URSlYoiUn7YFYDGcNSuLqLi6jA
-Access Token Secret:  is5CdY2tsNL8sWOC3g4iqkiH3OdI7fA6kIZQfyo2r90om
-
-
-
-Consumer API keys
------------------
-
-API key:
-fivRfXBqJfhXG2I5eH1IitJyl
-
-API secret key:
-IIUfw8cDg1oLRcln557wS2pYxcFgWrArK0K7VpbLgs1wody5P4
-
-
-Access token : 1097509651111911426-JNzrDWUWFyAYEmmejJabYcWDWWk4p4
-
-Access token secret : 0CyHfuBF5rjo8GWwoRXMBC42Jkx6x8xsv4qqvuMgzQTMG
+In Twitter App settings, generate the keys and tokens: 
+Access token:  1379463248475430918-p0q2VRx8xkYNrk5fSq9EGv03DArjBu
+Access token secret:  I5AjT4Wy6hjTyt53XcgwznFUP5VCDsVfzEdqCKpk3qve8
 
 
 
+Create a new directory to store all the data fetched from twitter
+```
 hdfs dfs -mkdir /user/twitter_data
+```
 
-
-Create/update twitter.conf file in   $FLUME_HOME/lib/conf  directory with details
-
+Create/update twitter.conf file in $FLUME_HOME/lib/conf directory with details
+```
 ### Naming the components on the current agent. 
 TwitterAgent.sources = Twitter 
 TwitterAgent.channels = MemChannel 
@@ -192,14 +163,31 @@ TwitterAgent.channels.MemChannel.transactionCapacity = 1000
 ### Binding the source and sink to the channel 
 TwitterAgent.sources.Twitter.channels = MemChannel
 TwitterAgent.sinks.HDFS.channel = MemChannel
+```
 
 
 Execute twitter.conf
 
 
-bin/flume-ng agent --conf ./conf/ -f conf/twitter.conf -Dflume.root.logger=DEBUG,console -n TwitterAgent
+// data fetched from twitter will be store into: /user/twitter_data
 
+```
+hadoop@ubuntudev:/usr/local/hadoop-ecosystem/flume-1.9.0$ 
+bin/flume-ng agent --conf ./conf/ -f conf/twitter.conf -Dflume.root.logger=DEBUG,console -n TwitterAgent
+```
+
+```
+hadoop@ubuntudev:~$ hdfs dfs -ls /user/twitter_data
+Found 4 items
+-rw-r--r--   1 hadoop supergroup     594436 2021-04-06 11:28 /user/twitter_data/FlumeData.1617733649852
+-rw-r--r--   1 hadoop supergroup     629624 2021-04-06 11:28 /user/twitter_data/FlumeData.1617733682771
+-rw-r--r--   1 hadoop supergroup     610482 2021-04-06 11:29 /user/twitter_data/FlumeData.1617733713787
+-rw-r--r--   1 hadoop supergroup     398261 2021-04-06 11:29 /user/twitter_data/FlumeData.1617733744813
+```
+
+```
 #bin/flume-ng agent --conf ./conf/ -f conf/netcat.conf -Dflume.root.logger=DEBUG,console -n MyAgent
+```
 
 
 
