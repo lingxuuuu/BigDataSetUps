@@ -119,6 +119,7 @@ Consumer Key (API Key): zXRC3ApImqLJyM9DPkITyMdZy
 Consumer Secret (API Secret): lGxDOIV4FP9ua2fftiZkxpKZ4y2WcnHo0LGBRnqw2IJgMvq2UE
 
 //Bearer token is not that important
+
 Bearer token: AAAAAAAAAAAAAAAAAAAAANNfOQEAAAAAEOnW6YqsmE287CS9BfsjR1EPCHQ%3DMg0wemicG2VCTLxbyULJYSeGeXkpSCp98u4mt8bUTp5Zr3KUHw
 
 In Twitter App settings, generate the keys and tokens: 
